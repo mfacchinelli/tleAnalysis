@@ -1,8 +1,10 @@
-%  Purpose:
+%  Purpose:     decode and plot Keplerian elements over time from given TLE
+%               file; the function can handle string overlap (in progress)
 %  Input:
-%   - 
+%   - file:     file name to be read, containing TLE information
 %  Output:
-%   - 
+%   - kepler:   array of time of TLE measurements and corresponding 
+%               Keplerian elements (t,a,e,i,O,o,TA)
 
 function kepler = readTLE(file)
 
@@ -26,12 +28,12 @@ year = str2double(string(time(:,1:2,:)));
 year(year>50) = 1900+year(year>50); % convert years to four digits
 year(year<50) = 2000+year(year<50); % ... (will only work until 2049)
 year = year - year(1); % convert year to years since first measurement
-days = str2double(string(time(:,3:end,:)));
-days = days - days(1); % convert days to days since first measurement
+day = str2double(string(time(:,3:end,:)));
+day = day - day(1); % convert day to days since first measurement
 
 %...Decode rest of lines
 % satID = read(3,1:2:end);                % [-]       satellite identifier
-t = year.*365+days;                     % [day]     time since first measurement
+t = year.*365+day;                     % [day]     time since first measurement
 i = str2double(read(3,2:2:end));        % [deg]     inclination
 O = str2double(read(4,2:2:end));        % [deg]     right ascension of ascending node
 e = str2double(read(5,2:2:end))./1e7;   % [-]       eccentricity
@@ -40,7 +42,6 @@ MA = str2double(read(7,2:2:end));       % [deg]     mean anomaly
 n = str2double(read(8,2:2:end));        % [rad/s]   mean motion
 T = Te./n;                              % [s]       period
 a = ((T./(2*pi)).^2*mu).^(1/3);         % [m]       semi-major axis
-% b = a.*sqrt(1-e.^2);                    % [m]       semi-minor axis
 
 %...Combine Keplerian elements
 kepler = vertcat(t,a,e,i,O,o,MA);
