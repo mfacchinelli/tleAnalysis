@@ -1,9 +1,9 @@
 clear all; close all; clc;
 
 %...Input file name
-% file = 'noaa-06.txt';       % NOAA 06   (full)
-% file = 'noaa.txt';          % NOAA 06   (reduced)
-file = 'zarya.txt';         % ISS       (reduced)
+% file = 'noaa-06.txt';       % NOAA 06   (full) doesn't work
+% file = 'noaa.txt';          % NOAA 06   (reduced) works
+file = 'zarya.txt';         % ISS       (reduced) works
 
 %...Read lines
 fileID = fopen(file,'r');
@@ -12,7 +12,7 @@ fclose(fileID);
 
 %...Reshape
 read = split(string(read));
-if mod(size(read,1),9) == 1, read = read(1:end-1); end
+if mod(size(read,1),9) ~= 0, error('Something went wrong while reading the TLE file.'); end
 read = reshape(read,9,[]);
 
 %...Constants
@@ -43,4 +43,5 @@ for i = 1:size(kepler,1)
     xlabel('Time [?]')
     ylabel(labels{i})
     grid on
+    set(gca,'FontSize',13)
 end
