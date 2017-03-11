@@ -10,6 +10,7 @@ function kepler = readTLE(file)
 
 %...Constants
 mu = 398600.441e9;          % [m3/s2]   Earth gravitational parameter
+Re = 6378.136e3;            % [m]       Earth radius
 Te = 23*3600+56*60+4.1004;  % [s]       Earth sidereal day
 
 %...Read lines
@@ -20,7 +21,7 @@ fclose(fileID);
 %...Reshape and correct for element overlap
 read = split(string(read));
 if mod(size(read,1),9) ~= 0 || size(char(read(end)),2) > 6
-    warning('Fixing bugs in text file. May take several seconds.');
+    warning('Fixing bugs in text file. This may take several seconds.');
     i = 1; % index to run through lines
     change = 0; % number of changes done
     limit = size(char(read(18:18:end,:)),1); % limiting number for check
@@ -51,8 +52,7 @@ year = year - year(1); % convert year to years since first measurement
 day = str2double(string(time(:,3:end,:)));
 day = day - day(1); % convert day to days since first measurement
 
-%...Decode rest of lines
-% satID = read(3,1:2:end);                % [-]       satellite identifier
+%...Decode Keplerian elements
 t = year.*365+day;                      % [day]     time since first measurement
 i = str2double(read(3,2:2:end));        % [deg]     inclination
 O = str2double(read(4,2:2:end));        % [deg]     right ascension of ascending node
@@ -61,9 +61,22 @@ o = str2double(read(6,2:2:end));        % [deg]     argument of perigee
 MA = str2double(read(7,2:2:end));       % [deg]     mean anomaly
 n = str2double(read(8,2:2:end));        % [rad/s]   mean motion
 
+%...Decode variables for propagation
+nd = 4*pi*str2double(read(5,1:2:end))./(3600*24)^2; % [rad/s^2] first derivative of mean motion
+
+ndd = char(read(6,1:2:end));
+decimal = str2double(string(ndd(1,1:end-2,:)));
+exponent = -str2double(string(ndd(1,end,:)));
+ndd = 12*pi*decimal.*10.^exponent./(3600*24)^3;     % [rad/s^3] second derivative of mean motion
+
+Bstar = char(read(7,1:2:end));
+decimal = str2double(string(Bstar(1,1:5,:)));
+exponent = str2double(string(Bstar(1,end-1:end,:)));
+exponent(exponent>0) = -exponent(exponent>0);
+Bstar = decimal.*10.^exponent*Re;                   % [1/m]     drag term
+
 %...Compute semi-major axis
-T = Te./n;                              % [s]       period
-a = ((T./(2*pi)).^2*mu).^(1/3);         % [m]       semi-major axis
+a = ((Te./(2*pi*n)).^2*mu).^(1/3);      % [m]       semi-major axis
 
 %...Compute true anomaly
 EA = MA.*ones(size(MA));
