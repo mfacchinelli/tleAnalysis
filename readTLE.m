@@ -33,22 +33,33 @@ day = day - day(1); % convert day to days since first measurement
 
 %...Decode rest of lines
 % satID = read(3,1:2:end);                % [-]       satellite identifier
-t = year.*365+day;                     % [day]     time since first measurement
+t = year.*365+day;                      % [day]     time since first measurement
 i = str2double(read(3,2:2:end));        % [deg]     inclination
 O = str2double(read(4,2:2:end));        % [deg]     right ascension of ascending node
 e = str2double(read(5,2:2:end))./1e7;   % [-]       eccentricity
 o = str2double(read(6,2:2:end));        % [deg]     argument of perigee
 MA = str2double(read(7,2:2:end));       % [deg]     mean anomaly
 n = str2double(read(8,2:2:end));        % [rad/s]   mean motion
+
+%...Compute semi-major axis
 T = Te./n;                              % [s]       period
 a = ((T./(2*pi)).^2*mu).^(1/3);         % [m]       semi-major axis
 
+%...Compute true anomaly
+EA = MA.*ones(size(MA));
+EA_0 = zeros(size(MA));
+while any(abs(EA-EA_0)>1e-10) % iterative process
+    EA_0 = EA;
+    EA = EA_0 + (MA-EA_0+e.*sind(EA_0))./(1-e.*cosd(EA_0)); % eccentric anomaly
+end
+TA = wrapTo360(2.*atand(sqrt((1+e)./(1-e)).*tand(EA./2)));  % [deg] true anomaly
+
 %...Combine Keplerian elements
-kepler = vertcat(t,a,e,i,O,o,MA);
+kepler = vertcat(t,a,e,i,O,o,TA);
 
 %...Plot Keplerian elements
 figure;
-labels = {'a [m]','e [-]','i [deg]','\Omega [deg]','\omega [deg]','M [deg]'};
+labels = {'a [m]','e [-]','i [deg]','\Omega [deg]','\omega [deg]','\vartheta [deg]'};
 for i = 1:size(kepler,1)-1
     subplot(3,2,i)
     plot(kepler(1,:),kepler(i+1,:))
