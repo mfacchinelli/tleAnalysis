@@ -17,7 +17,7 @@ e = keplerElements(3,:)';   % [-]       eccentricity
 i = keplerElements(4,:)';   % [deg]     inclination
 O = keplerElements(5,:)';   % [deg]     right ascension of ascending node
 o = keplerElements(6,:)';   % [deg]     argument of perigee
-MA = keplerElements(7,:)';  % [deg]     mean anomaly
+TA = keplerElements(7,:)';  % [deg]     true anomaly
 
 %% Thrust detection
 
