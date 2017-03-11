@@ -1,12 +1,13 @@
-clear all; close all; clc;
+clear all; close all; clc; format long g;
 
 %% Input file 
 
-%{
-    'noaa-06'       NOAA 06     (reduced)   works
-    'zarya'         ISS         (full)      works
-    'delfic3'       Delfi C3    (full)      works
-    'grace-2'       GRACE-2     (full)      works
+%{  
+    Choose file name from:
+        'noaa-06'       NOAA 06     (reduced)   works
+        'zarya'         ISS         (full)      works
+        'delfic3'       Delfi C3    (full)      works
+    	'grace-2'       GRACE-2     (full)      works
 %}
 file = 'zarya';
 
