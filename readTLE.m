@@ -102,3 +102,12 @@ for i = 1:size(kepler,1)-1
     grid on
     set(gca,'FontSize',13)
 end
+saveas(gca,['figures/',file(7:end-4)],'epsc')
+
+%...Plot histogram of observation frequency
+figure;
+histogram(t(2:end)-t(1:end-1))
+xlabel('\Delta t [day]')
+ylabel('Occurrences [day]')
+grid on
+set(gca,'FontSize',13)
