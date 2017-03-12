@@ -1,5 +1,5 @@
 %  Purpose:     decode and plot Keplerian elements over time from given TLE
-%               file; the function can handle string overlap (in progress)
+%               file; the function can handle string overlap
 %  Input:
 %   - file:     file name to be read, containing TLE information
 %  Output:
@@ -102,6 +102,7 @@ for i = 1:size(kepler,1)-1
     grid on
     set(gca,'FontSize',13)
 end
+subplotTitle('Keplerian Elements')
 saveas(gca,['figures/',file(7:end-4)],'epsc')
 
 %...Plot histogram of observation frequency
