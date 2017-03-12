@@ -108,6 +108,6 @@ saveas(gca,['figures/',file(7:end-4)],'epsc')
 figure;
 histogram(t(2:end)-t(1:end-1))
 xlabel('\Delta t [day]')
-ylabel('Occurrences [day]')
+ylabel('Occurrences [-]')
 grid on
 set(gca,'FontSize',13)
