@@ -11,11 +11,13 @@ clear all; close all; clc; format long g;
         'noaa'          NOAA 06         (reduced)   works
         'zarya'         ISS             (full)      works
 %}
+
 file = 'zarya';
 
 %% Decode TLE
 
 keplerElements = readTLE(['files/',file,'.txt']);
+close all
 
 t = keplerElements(1,:)';   % [day]     time since first measurement
 a = keplerElements(2,:)';   % [m]       semi-major axis
@@ -27,3 +29,7 @@ TA = keplerElements(7,:)';  % [deg]     true anomaly
 
 %% Thrust detection
 
+%% End
+
+%...Inform user of completion
+disp('Terminated')
