@@ -9,11 +9,20 @@ clear all; close all; clc; format long g;
         'delfic3'       Delfi C3        (full)      works
         'gps'           BIIR-2          (full)      works
         'grace'         GRACE-2         (full)      works
+        'planet'        DOVE-2          (full)      works
         'noaa'          NOAA 06         (full)      works
         'zarya'         ISS             (full)      works
 %}
 
-file = 'noaa';
+file = 'zarya';
+firstTime = 0; % specify if first time reading this file
+
+%% Correct TLE
+
+%...ONLY IF FIRST TIME READING TLE!
+if firstTime == 1
+    correctTLE(['files/',file,'.txt'])
+end
 
 %% Decode TLE
 

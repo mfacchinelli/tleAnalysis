@@ -1,5 +1,5 @@
 %  Purpose:     decode and plot Keplerian elements over time from given TLE
-%               file; the function can handle string overlap
+%               file; use correctTLE function to correct element overlap
 %  Input:
 %   - file:     file name to be read, containing TLE information
 %  Output:
@@ -18,29 +18,12 @@ fileID = fopen(file,'r');
 read = fscanf(fileID,'%c');
 fclose(fileID);
 
-%...Reshape and correct for element overlap
+%...Reshape data
 read = split(string(read));
+read = read(1:end-1,1);
 if mod(size(read,1),9) ~= 0 || size(char(read(end)),2) > 6
-    warning('Fixing bugs in text file. This may take several seconds.');
-    i = 1; % index to run through lines
-    change = 0; % number of changes done
-    limit = size(char(read(18:18:end,:)),1); % limiting number for check
-    while i < limit
-        try
-            if size(char(read(i*18-1,:)),2) ~= 11
-                value17 = char(read(i*18-1,:));
-                read(i*18-1,:) = string(value17(1:11));
-                read = vertcat(read,zeros(1));
-                read(i*18+1:end,:) = read(i*18:end-1,:);
-                read(i*18,:) = string(value17(12:end));
-                change = change+1;
-                if mod(change,9) == 0, limit = limit+1; end
-            end
-        end
-        i = i+1;
-    end
+    error('Please correct the file before running.');
 end
-if mod(size(read,1),9) ~= 0, error('Something went wrong while reading the TLE file.'); end
 read = reshape(read,9,[]);
 
 %...Decode time
@@ -63,8 +46,8 @@ for i = find(leap==1)
 end
 
 %...Show time interval
-disp(['First observation on day ',num2str(dayInit),', year ',num2str(yearInit)])
-disp(['Last observation on day ',num2str(dayEnd),', year ',num2str(yearEnd)])
+disp(['First observation on day ',num2str(dayInit),', year ',num2str(yearInit),'.'])
+disp(['Last observation on day ',num2str(dayEnd),', year ',num2str(yearEnd),'.'])
 
 %...Decode Keplerian elements
 i = str2double(read(3,2:2:end));        % [deg]     inclination
