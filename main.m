@@ -4,6 +4,7 @@ clear all; close all; clc; format long g;
 
 %{  
     Choose file name from:
+        'amateur'       Amateur Radio   (full)      works
         'debris'        COSMOS Debris   (full)      works
         'delfic3'       Delfi C3        (full)      works
         'gps'           BIIR-2          (full)      works
@@ -12,12 +13,11 @@ clear all; close all; clc; format long g;
         'zarya'         ISS             (full)      works
 %}
 
-file = 'zarya';
+file = 'noaa';
 
 %% Decode TLE
 
 keplerElements = readTLE(['files/',file,'.txt']);
-close all
 
 t = keplerElements(1,:)';   % [day]     time since first measurement
 a = keplerElements(2,:)';   % [m]       semi-major axis
@@ -28,6 +28,8 @@ o = keplerElements(6,:)';   % [deg]     argument of perigee
 TA = keplerElements(7,:)';  % [deg]     true anomaly
 
 %% Thrust detection
+
+
 
 %% End
 
