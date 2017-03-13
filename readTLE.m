@@ -43,17 +43,30 @@ end
 if mod(size(read,1),9) ~= 0, error('Something went wrong while reading the TLE file.'); end
 read = reshape(read,9,[]);
 
-%...Decode time (disregards leap years)
+%...Decode time
 time = char(read(4,1:2:end));
 year = str2double(string(time(:,1:2,:)));
 year(year>50) = 1900+year(year>50); % convert years to four digits
 year(year<50) = 2000+year(year<50); % ... (will only work until 2049)
-year = year - year(1); % convert year to years since first measurement
+leap = year.*(mod(year-1,4)==0); % find leap years
+leap = diff(leap-1)>1; % find discontinuity in leap years
+yearInit = year(1); yearEnd = year(end);
+year = year - yearInit; % convert year to years since first measurement
 day = str2double(string(time(:,3:end,:)));
-day = day - day(1); % convert day to days since first measurement
+dayInit = day(1); dayEnd = day(end);
+day = day - dayInit; % convert day to days since first measurement
+
+%...Adjust for leap years
+t = year.*365+day;                      % [day]     time since first measurement
+for i = find(leap==1)
+    t(i+1:end) = t(i+1:end)+1;
+end
+
+%...Show initial time
+disp(['First observation on day ',num2str(dayInit),', year ',num2str(yearInit)])
+disp(['Last observation on day ',num2str(dayEnd),', year ',num2str(yearEnd)])
 
 %...Decode Keplerian elements
-t = year.*365+day;                      % [day]     time since first measurement
 i = str2double(read(3,2:2:end));        % [deg]     inclination
 O = str2double(read(4,2:2:end));        % [deg]     right ascension of ascending node
 e = str2double(read(5,2:2:end))./1e7;   % [-]       eccentricity
@@ -107,7 +120,7 @@ saveas(gca,['figures/',file(7:end-4)],'epsc')
 
 %...Plot histogram of observation frequency
 figure;
-histogram(t(2:end)-t(1:end-1))
+histogram(diff(t))
 xlabel('\Delta t [day]')
 ylabel('Occurrences [-]')
 grid on
