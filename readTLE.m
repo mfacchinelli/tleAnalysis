@@ -13,21 +13,16 @@ mu = 398600.441e9;          % [m3/s2]   Earth gravitational parameter
 Re = 6378.136e3;            % [m]       Earth radius
 Te = 23*3600+56*60+4.1004;  % [s]       Earth sidereal day
 
+%...Correct file if first time
+correctTLE(file)
+
 %...Read lines
 fileID = fopen(file,'r');
-read = fscanf(fileID,'%c');
+read = textscan(fileID,'%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n','CommentStyle','#');
 fclose(fileID);
 
-%...Reshape data
-read = split(string(read));
-read = read(1:end-1,1);
-if mod(size(read,1),9) ~= 0 || size(char(read(end)),2) > 6
-    error('Please correct the file before running.');
-end
-read = reshape(read,9,[]);
-
 %...Decode time
-time = char(read(4,1:2:end));
+time = char(read{4});
 year = str2double(string(time(:,1:2,:)));
 year(year>50) = 1900+year(year>50); % convert years to four digits
 year(year<50) = 2000+year(year<50); % ... (will only work until 2049)
@@ -41,7 +36,7 @@ day = day - dayInit; % convert day to days since first measurement
 
 %...Adjust for leap years
 t = year.*365+day;                      % [day]     time since first measurement
-for i = find(leap==1)
+for i = find(leap==1)'
     t(i+1:end) = t(i+1:end)+1;
 end
 
@@ -50,22 +45,22 @@ disp(['First observation on day ',num2str(dayInit),', year ',num2str(yearInit),'
 disp(['Last observation on day ',num2str(dayEnd),', year ',num2str(yearEnd),'.'])
 
 %...Decode Keplerian elements
-i = str2double(read(3,2:2:end));        % [deg]     inclination
-O = str2double(read(4,2:2:end));        % [deg]     right ascension of ascending node
-e = str2double(read(5,2:2:end))./1e7;   % [-]       eccentricity
-o = str2double(read(6,2:2:end));        % [deg]     argument of perigee
-MA = str2double(read(7,2:2:end));       % [deg]     mean anomaly
-n = str2double(read(8,2:2:end));        % [rad/s]   mean motion
+i = str2double(read{12});       % [deg]     inclination
+O = str2double(read{13});       % [deg]     right ascension of ascending node
+e = str2double(read{14})./1e7;  % [-]       eccentricity
+o = str2double(read{15});       % [deg]     argument of perigee
+MA = str2double(read{16});      % [deg]     mean anomaly
+n = str2double(read{17});       % [rad/s]   mean motion
 
 %...Decode variables for propagation
-nd = 4*pi*str2double(read(5,1:2:end))./(3600*24)^2; % [rad/s^2] first derivative of mean motion
+nd = 4*pi*str2double(read{5})./(3600*24)^2; % [rad/s^2] first derivative of mean motion
 
-ndd = char(read(6,1:2:end));
+ndd = char(read{6});
 decimal = str2double(string(ndd(1,1:end-2,:)));
 exponent = -str2double(string(ndd(1,end,:)));
 ndd = 12*pi*decimal.*10.^exponent./(3600*24)^3;     % [rad/s^3] second derivative of mean motion
 
-Bstar = char(read(7,1:2:end));
+Bstar = char(read{7});
 decimal = str2double(string(Bstar(1,1:5,:)));
 exponent = str2double(string(Bstar(1,end-1:end,:)));
 exponent(exponent>0) = -exponent(exponent>0);
@@ -86,17 +81,17 @@ end
 TA = wrapTo360(2.*atand(sqrt((1+e)./(1-e)).*tand(EA./2)));  % [deg] true anomaly
 
 %...Combine Keplerian elements
-kepler = vertcat(t,a,e,i,O,o,TA);
+kepler = horzcat(t,a,e,i,O,o,TA);
 
 %...Plot Keplerian elements
 figure;
 labels = {'a [m]','e [-]','i [deg]','\Omega [deg]','\omega [deg]','\vartheta [deg]'};
-for i = 1:size(kepler,1)-1
+for i = 1:size(kepler,2)-1
     subplot(3,2,i)
-    plot(kepler(1,:),kepler(i+1,:))
+    plot(kepler(:,1),kepler(:,i+1))
     xlabel('Time [day]')
     ylabel(labels{i})
-    xlim([kepler(1,1),kepler(1,end)])
+    xlim([kepler(1,1),kepler(end,1)])
     grid on
     set(gca,'FontSize',13)
 end
