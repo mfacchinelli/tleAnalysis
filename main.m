@@ -9,7 +9,7 @@ clear all; close all; clc; format long g;
         'delfic3'       Delfi C3        (full)      works
         'gps'           BIIR-2          (full)      works
         'grace'         GRACE-2         (full)      works
-        'noaa'          NOAA 06         (reduced)   works
+        'noaa'          NOAA 06         (full)      works
         'zarya'         ISS             (full)      works
 %}
 
