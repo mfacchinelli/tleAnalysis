@@ -62,7 +62,7 @@ for i = find(leap==1)
     t(i+1:end) = t(i+1:end)+1;
 end
 
-%...Show initial time
+%...Show time interval
 disp(['First observation on day ',num2str(dayInit),', year ',num2str(yearInit)])
 disp(['Last observation on day ',num2str(dayEnd),', year ',num2str(yearEnd)])
 
@@ -94,7 +94,9 @@ a = ((Te./(2*pi*n)).^2*mu).^(1/3);      % [m]       semi-major axis
 %...Compute true anomaly
 EA = MA.*ones(size(MA));
 EA_0 = zeros(size(MA));
-while any(abs(EA-EA_0)>1e-10) % iterative process
+iter = 0;
+while any(abs(EA-EA_0)>1e-10) && iter < 5e3 % iterative process (with safety break)
+    iter = iter+1;
     EA_0 = EA;
     EA = EA_0 + (MA-EA_0+e.*sind(EA_0))./(1-e.*cosd(EA_0)); % eccentric anomaly
 end
