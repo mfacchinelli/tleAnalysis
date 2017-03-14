@@ -7,6 +7,8 @@ clear all; close all; clc; format long g;
         'amateur'       Amateur Radio   (full)      works
         'debris'        COSMOS Debris   (full)      works
         'delfic3'       Delfi C3        (full)      works
+        'envisat'       ENVISAT         (full)      works
+        'goes'          GOES-4          (full)      works
         'gps'           BIIR-2          (full)      works
         'grace'         GRACE-2         (full)      works
         'planet'        DOVE-2          (full)      works
@@ -14,7 +16,7 @@ clear all; close all; clc; format long g;
         'zarya'         ISS             (full)      works
 %}
 
-file = 'gps';
+file = 'envisat';
 
 %% Decode TLE
 
