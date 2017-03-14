@@ -55,16 +55,16 @@ n = str2double(read{17});       % [rad/s]   mean motion
 %...Decode variables for propagation
 nd = 4*pi*str2double(read{5})./(3600*24)^2; % [rad/s^2] first derivative of mean motion
 
-ndd = char(read{6});
-decimal = str2double(string(ndd(1,1:end-2,:)));
-exponent = -str2double(string(ndd(1,end,:)));
-ndd = 12*pi*decimal.*10.^exponent./(3600*24)^3;     % [rad/s^3] second derivative of mean motion
-
-Bstar = char(read{7});
-decimal = str2double(string(Bstar(1,1:5,:)));
-exponent = str2double(string(Bstar(1,end-1:end,:)));
-exponent(exponent>0) = -exponent(exponent>0);
-Bstar = decimal.*10.^exponent*Re;                   % [1/m]     drag term
+% ndd = char(read{6});
+% decimal = str2double(string(ndd(1,1:end-2,:)));
+% exponent = -str2double(string(ndd(1,end,:)));
+% ndd = 12*pi*decimal.*10.^exponent./(3600*24)^3;     % [rad/s^3] second derivative of mean motion
+% 
+% Bstar = char(read{7});
+% decimal = str2double(string(Bstar(1,1:5,:)));
+% exponent = str2double(string(Bstar(1,end-1:end,:)));
+% exponent(exponent>0) = -exponent(exponent>0);
+% Bstar = decimal.*10.^exponent*Re;                   % [1/m]     drag term
 
 %...Compute semi-major axis
 a = ((Te./(2*pi*n)).^2*mu).^(1/3);      % [m]       semi-major axis
@@ -79,6 +79,11 @@ while any(abs(EA-EA_0)>1e-10) && iter < 5e3 % iterative process (with safety bre
     EA = EA_0 + (MA-EA_0+e.*sind(EA_0))./(1-e.*cosd(EA_0)); % eccentric anomaly
 end
 TA = wrapTo360(2.*atand(sqrt((1+e)./(1-e)).*tand(EA./2)));  % [deg] true anomaly
+
+%...Remove duplicates
+where = diff(t)~=0; % remove duplicates in time
+t = t(where); a = a(where); e = e(where); i = i(where); O = O(where); o = o(where);
+TA = TA(where); nd = nd(where); %ndd = ndd(where); %Bstar = Bstar(where);
 
 %...Combine Keplerian elements
 kepler = horzcat(t,a,e,i,O,o,TA);
