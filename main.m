@@ -16,7 +16,7 @@ clear all; close all; clc; format long g;
         'zarya'         ISS             (full)      works
 %}
 
-file = 'delfic3';
+file = 'goce';
 
 %% Decode TLE
 
