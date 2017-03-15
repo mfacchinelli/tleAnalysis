@@ -55,16 +55,17 @@ n = str2double(read{17});       % [rad/s]   mean motion
 %...Decode variables for propagation
 nd = 4*pi*str2double(read{5})./(3600*24)^2; % [rad/s^2] first derivative of mean motion
 
-% ndd = char(read{6});
-% decimal = str2double(string(ndd(1,1:end-2,:)));
-% exponent = -str2double(string(ndd(1,end,:)));
-% ndd = 12*pi*decimal.*10.^exponent./(3600*24)^3;     % [rad/s^3] second derivative of mean motion
-% 
-% Bstar = char(read{7});
-% decimal = str2double(string(Bstar(1,1:5,:)));
-% exponent = str2double(string(Bstar(1,end-1:end,:)));
-% exponent(exponent>0) = -exponent(exponent>0);
-% Bstar = decimal.*10.^exponent*Re;                   % [1/m]     drag term
+ndd = char(read{6});
+decimal = str2double(string(ndd(:,1:end-3)));
+exponent = str2double(string(ndd(:,end-1:end)));
+exponent(exponent>0) = -exponent(exponent>0); % force exponents to negative
+ndd = 12*pi*decimal.*10.^exponent./(3600*24)^3;     % [rad/s^3] second derivative of mean motion
+
+Bstar = char(read{7});
+decimal = str2double(string(Bstar(:,1:5)));
+exponent = str2double(string(Bstar(:,end-1:end)));
+exponent(exponent>0) = -exponent(exponent>0); % force exponents to negative
+Bstar = decimal.*10.^exponent*Re;                   % [1/m]     drag term
 
 %...Compute semi-major axis
 a = ((Te./(2*pi*n)).^2*mu).^(1/3);      % [m]       semi-major axis
