@@ -8,6 +8,7 @@ clear all; close all; clc; format long g;
         'debris'        COSMOS Debris   (full)      works
         'delfic3'       Delfi C3        (full)      works
         'envisat'       ENVISAT         (full)      works
+        'goce'          GOCE            (full)      works
         'goes'          GOES-4          (full)      works
         'gps'           BIIR-2          (full)      works
         'grace'         GRACE-2         (full)      works
@@ -16,7 +17,7 @@ clear all; close all; clc; format long g;
         'zarya'         ISS             (full)      works
 %}
 
-file = 'goce';
+file = 'amateur';
 
 %% Decode TLE
 
@@ -32,7 +33,7 @@ TA = keplerElements(:,7);   % [deg]     true anomaly
 
 %% Thrust detection
 
-
+thrustDetection(keplerElements)
 
 %% End
 
