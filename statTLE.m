@@ -12,3 +12,8 @@ de = diff(kepler(:,3));
 di = diff(kepler(:,4));
 dO = diff(kepler(:,5));
 do = diff(kepler(:,6));
+
+%hellooooooo, did it change??
+
+
+
