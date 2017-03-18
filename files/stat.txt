@@ -1,0 +1,6 @@
+# File with TLE statistics
+# 
+# The data that is stored is related to statistics of perturbations for satellites
+# without thrust and at altitudes where perturbations do not play a major role. 
+# Order of data: satID, mean, std, max, min (for each Keplerian element)
+#
