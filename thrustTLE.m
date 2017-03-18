@@ -27,6 +27,12 @@ di = diff(kepler(lower:end,4));
 dO = diff(kepler(lower:end,5));
 do = diff(kepler(lower:end,6));
 
+%...Remove changes of 360 degrees from O and o
+dO(dO>180) = dO(dO>180)-360;
+dO(dO<-180) = dO(dO<-180)+360;
+do(do>180) = do(do>180)-360;
+do(do<-180) = do(do<-180)+360;
+
 %...Get statistics
 data = statTLE([da,de,di,dO,do],options);
 
@@ -38,18 +44,29 @@ warning('off')
 [~,locs_e_2] = findpeaks(-de,'MinPeakHeight',factor*data.e(2)); % negative change
 [~,locs_i_1] = findpeaks(di,'MinPeakHeight',factor*data.i(1)); % positive change
 [~,locs_i_2] = findpeaks(-di,'MinPeakHeight',factor*data.i(2)); % negative change
+[~,locs_O_1] = findpeaks(dO,'MinPeakHeight',factor*data.O(1)); % positive change
+[~,locs_O_2] = findpeaks(-dO,'MinPeakHeight',factor*data.O(2)); % negative change
+[~,locs_o_1] = findpeaks(do,'MinPeakHeight',factor*data.o(1)); % positive change
+[~,locs_o_2] = findpeaks(-do,'MinPeakHeight',factor*data.o(2)); % negative change
 warning('on')
 
 %...Merge positive and negative values
 locs_a = lower+sort(vertcat(locs_a_1,locs_a_2));
 locs_e = lower+sort(vertcat(locs_e_1,locs_e_2));
 locs_i = lower+sort(vertcat(locs_i_1,locs_i_2));
+locs_O = lower+sort(vertcat(locs_O_1,locs_O_2));
+locs_o = lower+sort(vertcat(locs_o_1,locs_o_2));
+locs = {locs_a,locs_e,locs_i,locs_O,locs_o};
 
 %...Check for repetitions
 thrustDays = [];
-thrustDays = vertcat(thrustDays,intersect(kepler(locs_a,1),kepler(locs_e,1)));
-thrustDays = vertcat(thrustDays,intersect(kepler(locs_e,1),kepler(locs_i,1)));
-thrustDays = vertcat(thrustDays,intersect(kepler(locs_a,1),kepler(locs_i,1)));
+for i = 1:5
+    for j = 1:5
+        if 1 ~= j
+            thrustDays = vertcat(thrustDays,intersect(kepler(locs{i},1),kepler(locs{j},1)));
+        end
+    end
+end
 thrustDays = unique(thrustDays);
 
 %...Find thurst periods

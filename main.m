@@ -4,20 +4,20 @@ clear all; close all; clc; format long g;
 
 %{  
     Choose file name from:
-        'amateur'       Amateur Radio   (full)
-        'debris'        COSMOS Debris   (full)
-        'delfic3'       Delfi C3        (full)
-        'envisat'       ENVISAT         (full)
-        'goce'          GOCE            (full)
-        'goes'          GOES-4          (full)
-        'gps'           BIIR-2          (full)
-        'grace'         GRACE-2         (full)
-        'lageos'        LAGEOS-1        (full)
-        'planet'        DOVE-2          (full)
-        'noaa'          NOAA 06         (full)
-        'zarya'         ISS             (full)
+        'amateur'       Amateur Radio
+        'debris'        COSMOS Debris
+        'delfic3'       Delfi C3
+        'envisat'       ENVISAT
+        'goce'          GOCE
+        'goes'          GOES-4
+        'gps'           BIIR-2
+        'grace'         GRACE-2
+        'lageos'        LAGEOS-1
+        'planet'        DOVE-2
+        'noaa'          NOAA 06
+        'zarya'         ISS
 %}
-options.file = 'grace';
+options.file = 'zarya';
 
 %% Settings
 
@@ -31,6 +31,7 @@ options.thrust = 'na';
 
 %...Make sure selection is intentional
 if strcmp(options.thrust,'no')
+    warning('You selected no thrust!')
     input(['Press enter to confirm that this spacecraft has no thrust.',newline])
 end
 
@@ -60,4 +61,4 @@ thrustTLE(kepler,options)
 %% End
 
 %...Inform user of completion
-disp('Terminated')
+disp([newline,'Terminated'])
