@@ -43,7 +43,7 @@ end
 fclose(fileID);
 
 %...Collect data
-fileID = fopen(file,'r');
+fileID = fopen('files/stat.txt','r');
 data = textscan(fileID,'%s\t%f\t%f\t%f\t%f\n','CommentStyle','#');
 fclose(fileID);
 

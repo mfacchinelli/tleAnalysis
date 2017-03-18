@@ -17,23 +17,35 @@ clear all; close all; clc; format long g;
         'noaa'          NOAA 06         (full)
         'zarya'         ISS             (full)
 %}
-file = 'lageos';
+file = 'zarya';
+
+%% Settings
 
 %{
-    Select thrust setting
-        no:   for sure satellite has no thrust
-        na:   no available information/do not know
+    Select thrust setting:
+        'no':   for sure satellite has no thrust
+        'na':   no available information/do not know (can be any string
+                except for 'no')
 %}
-thrust = 'no';
+thrust = 'na';
 
 %...Make sure selection is intentional
 if strcmp(thrust,'no')
-    input('Press enter to confirm that this spacecraft has no thrust')
+    input(['Press enter to confirm that this spacecraft has no thrust.',newline])
 end
+
+%...Ignore first XXX percent of data
+ignore = 0.05;
+
+%...Safety factor for thrust detection
+factor = 1.5;
+
+%...Limit for days of separations between maneuvers
+limit = 50;
 
 %% Decode TLE
 
-options = struct('showfig','yes');
+options = struct('showfig','no');
 data = readTLE(['files/',file,'.txt'],options);
 kepler = data.orbit;
 
@@ -47,7 +59,7 @@ TA = kepler(:,7);   % [deg]     true anomaly
 
 %% Thrust detection
 
-options = struct('ID',data.ID,'thrust',thrust,'ignore',0.1);
+options = struct('ID',data.ID,'thrust',thrust,'ignore',ignore,'factor',factor,'limit',limit);
 
 thrustTLE(kepler,options)
 
