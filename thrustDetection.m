@@ -1,10 +1,11 @@
-%  Purpose:     correct the TLE information from element overlap
+%  Purpose:     detect thrust usage, by analyzing changes in TLE data
 %  Input:
 %   - kepler:   Keplerian elements of satellite to be analyzed 
+%   - options:  
 %  Output:
 %   - N/A
 
-function thrustDetection(kepler)
+function thrustDetection(kepler,options)
 
 %...Change in orbital elements
 da = diff(kepler(:,2));
@@ -16,6 +17,9 @@ do = diff(kepler(:,6));
 %...Remove changes of 360 degrees from O and o
 % dO(diff(dO)>350) = dO(diff(dO)>350)+360;
 % dO(diff(dO)<-350) = dO(diff(dO)<-350)-360;
+
+%...Get statistics
+statTLE([da,de,di,dO,do],options);
 
 %...Detect thrust peaks
 [peaks_a_1,locs_a_1] = findpeaks(da,'MinPeakHeight',std(da)); % positive change
@@ -34,6 +38,6 @@ peaks_i = sort(vertcat(peaks_i_1,peaks_i_2));
 locs_i = sort(vertcat(locs_i_1,locs_i_2));
 
 %...Check for repetitions
-intersect(t(locs_a),t(locs_e))
-intersect(t(locs_e),t(locs_i))
-intersect(t(locs_a),t(locs_i))
+intersect(kepler(locs_a,1),kepler(locs_e,1))
+intersect(kepler(locs_e,1),kepler(locs_i,1))
+intersect(kepler(locs_a,1),kepler(locs_i,1))

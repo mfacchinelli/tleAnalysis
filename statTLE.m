@@ -1,3 +1,11 @@
+%  Purpose:     collect statistical information on TLEs of satellites with
+%               no thrust, and output data for thrust detection
+%  Input:
+%   - derivatives:  
+%   - options:      
+%  Output:
+%   - N/A
+
 function statTLE(derivatives,options)
 
 %...Extract data

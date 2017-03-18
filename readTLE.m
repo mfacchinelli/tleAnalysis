@@ -6,7 +6,7 @@
 %   - kepler:   array of time of TLE measurements and corresponding 
 %               Keplerian elements (t,a,e,i,O,o,TA)
 
-function kepler = readTLE(file)
+function extract = readTLE(file,options)
 
 %...Constants
 mu = 398600.441e9;          % [m3/s2]   Earth gravitational parameter
@@ -20,6 +20,9 @@ correctTLE(file)
 fileID = fopen(file,'r');
 read = textscan(fileID,'%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n','CommentStyle','#');
 fclose(fileID);
+
+%...Decode satellite identifier
+satID = string(read{3}{1});
 
 %...Decode time
 time = char(read{4});
@@ -84,30 +87,37 @@ TA = wrapTo360(2.*atand(sqrt((1+e)./(1-e)).*tand(EA./2)));  % [deg] true anomaly
 %...Remove duplicates
 where = diff(t)~=0; % remove duplicates in time
 t = t(where); a = a(where); e = e(where); i = i(where); O = O(where); o = o(where);
-TA = TA(where); nd = nd(where); %ndd = ndd(where); %Bstar = Bstar(where);
+TA = TA(where); nd = nd(where); ndd = ndd(where); Bstar = Bstar(where);
 
 %...Combine Keplerian elements
 kepler = horzcat(t,a,e,i,O,o,TA);
+propagation = horzcat(nd,ndd,Bstar);
 
-%...Plot Keplerian elements
-figure;
-labels = {'a [m]','e [-]','i [deg]','\Omega [deg]','\omega [deg]','\vartheta [deg]'};
-for i = 1:size(kepler,2)-1
-    subplot(3,2,i)
-    plot(kepler(:,1),kepler(:,i+1))
-    xlabel('Time [day]')
-    ylabel(labels{i})
-    xlim([kepler(1,1),kepler(end,1)])
+%...Plot results
+if strcmp(options.showfig,'yes')
+    %...Plot Keplerian elements
+    figure;
+    labels = {'a [m]','e [-]','i [deg]','\Omega [deg]','\omega [deg]','\vartheta [deg]'};
+    for i = 1:size(kepler,2)-1
+        subplot(3,2,i)
+        plot(kepler(:,1),kepler(:,i+1))
+        xlabel('Time [day]')
+        ylabel(labels{i})
+        xlim([kepler(1,1),kepler(end,1)])
+        grid on
+        set(gca,'FontSize',13)
+    end
+    subplotTitle('Keplerian Elements')
+    saveas(gca,['figures/',file(7:end-4)],'epsc')
+
+    %...Plot histogram of observation frequency
+    figure;
+    histogram(diff(t))
+    xlabel('\Delta t [day]')
+    ylabel('Occurrences [-]')
     grid on
     set(gca,'FontSize',13)
 end
-subplotTitle('Keplerian Elements')
-saveas(gca,['figures/',file(7:end-4)],'epsc')
 
-%...Plot histogram of observation frequency
-figure;
-histogram(diff(t))
-xlabel('\Delta t [day]')
-ylabel('Occurrences [-]')
-grid on
-set(gca,'FontSize',13)
+%...Struct of extraced data
+extract = struct('ID',satID,'orbit',kepler,'propagator',propagation);
