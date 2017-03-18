@@ -6,7 +6,7 @@
 %  Output:
 %   - N/A
 
-function statTLE(derivatives,options)
+function extract = statTLE(derivatives,options)
 
 %...Extract data
 da = derivatives(:,1);
@@ -32,18 +32,32 @@ if strcmp(thrust,'no')
     mins = [min(da);min(de);min(di);min(dO);min(do)];
 
     %...Check if satellite is already in file
-    if any(data{1}~=satID)
+    if ~any(data{1}==satID)
         %...Append to file
         saveData = [ids,means,stds,maxs,mins];
-        for i = 1:5
+        for i = 1:5 
             fprintf(fileID,'%s\t%+.6e\t%+.6e\t%+.6e\t%+.6e\n',saveData(i,:));
         end
     end
 end
+fclose(fileID);
 
 %...Collect data
+fileID = fopen(file,'r');
 data = textscan(fileID,'%s\t%f\t%f\t%f\t%f\n','CommentStyle','#');
 fclose(fileID);
 
 %...Analyze data
-max_a = max()
+max_a = max(data{4}(1:5:end));
+min_a = abs(min(data{5}(1:5:end)));
+max_e = max(data{4}(2:5:end));
+min_e = abs(min(data{5}(2:5:end)));
+max_i = max(data{4}(3:5:end));
+min_i = abs(min(data{5}(3:5:end)));
+max_O = max(data{4}(4:5:end));
+min_O = abs(min(data{5}(4:5:end)));
+max_o = max(data{4}(5:5:end));
+min_o = abs(min(data{5}(5:5:end)));
+
+%...Struct of extraced data
+extract = struct('a',[max_a,min_a],'e',[max_e,min_e],'i',[max_i,min_i],'O',[max_O,min_O],'o',[max_o,min_o]);

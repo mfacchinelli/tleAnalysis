@@ -17,11 +17,19 @@ clear all; close all; clc; format long g;
         'noaa'          NOAA 06         (full)
         'zarya'         ISS             (full)
 %}
-
 file = 'lageos';
-thrust = 'na'; 
-% no:   for sure satellite has no thrust
-% na:   no available information/do not know
+
+%{
+    Select thrust setting
+        no:   for sure satellite has no thrust
+        na:   no available information/do not know
+%}
+thrust = 'no';
+
+%...Make sure selection is intentional
+if strcmp(thrust,'no')
+    input('Press enter to confirm that this spacecraft has no thrust')
+end
 
 %% Decode TLE
 
@@ -39,9 +47,9 @@ TA = kepler(:,7);   % [deg]     true anomaly
 
 %% Thrust detection
 
-options = struct('ID',data.ID,'thrust',thrust);
+options = struct('ID',data.ID,'thrust',thrust,'ignore',0.1);
 
-thrustDetection(kepler,options)
+thrustTLE(kepler,options)
 
 %% End
 
