@@ -1,3 +1,5 @@
+%  MATLAB Function < correctTLE >
+%
 %  Purpose:     correct the TLE information from element overlap
 %  Input:
 %   - file:     file name to be corrected, containing TLE information

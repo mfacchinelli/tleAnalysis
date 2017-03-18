@@ -1,10 +1,17 @@
+%  MATLAB Function < statTLE >
+%
 %  Purpose:     collect statistical information on TLEs of satellites with
 %               no thrust, and output data for thrust detection
 %  Input:
-%   - derivatives:  
-%   - options:      
+%   - derivatives:  array containing changes in Keplerian elements for each
+%                   time step
+%   - options:      structure array containing:
+%                       1) ID:      satellite identifier
+%                       2) thrust:  presence of propulsion subsystem on
+%                                   satellite
 %  Output:
-%   - N/A
+%   - extract:  structure array containing maximum and minimum limitation
+%               values for each Keplerian element, for thrust detection
 
 function extract = statTLE(derivatives,options)
 

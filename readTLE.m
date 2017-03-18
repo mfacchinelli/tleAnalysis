@@ -1,12 +1,25 @@
+%  MATLAB Function < readTLE >
+% 
 %  Purpose:     decode and plot Keplerian elements over time from given TLE
 %               file; use correctTLE function to correct element overlap
 %  Input:
-%   - file:     file name to be read, containing TLE information
+%   - options:  structure array containing:
+%                   1) file:        file name to be read, to extract TLE 
+%                                   information
+%                   2) showfig:     command whether to show plots
 %  Output:
-%   - kepler:   array of time of TLE measurements and corresponding 
-%               Keplerian elements (t,a,e,i,O,o,TA)
+%   - extract:  structure array containing: 
+%                   1) ID:          satellite identifier
+%                   2) kepler:      time of TLE measurements and corresponding 
+%                                   Keplerian elements (t,a,e,i,O,o,TA)
+%                   3) propagator:  data for propagation for each
+%                                   observation time (nd,ndd,Bstar)
 
-function extract = readTLE(file,options)
+function extract = readTLE(options)
+
+%...Extract options
+file = options.file;
+showfig = options.showfig;
 
 %...Constants
 mu = 398600.441e9;          % [m3/s2]   Earth gravitational parameter
@@ -94,7 +107,7 @@ kepler = horzcat(t,a,e,i,O,o,TA);
 propagation = horzcat(nd,ndd,Bstar);
 
 %...Plot results
-if strcmp(options.showfig,'yes')
+if strcmp(showfig,'yes')
     %...Plot Keplerian elements
     figure;
     labels = {'a [m]','e [-]','i [deg]','\Omega [deg]','\omega [deg]','\vartheta [deg]'};
