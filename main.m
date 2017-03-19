@@ -1,10 +1,12 @@
 clear all; close all; clc; format long g;
+addpath functions/
 
 %% Input file 
 
 %{  
     Choose file name from:
         'amateur'       Amateur Radio
+        'cryosat'       CryoSat-2
         'debris'        COSMOS Debris
         'delfic3'       Delfi C3
         'envisat'       ENVISAT
@@ -12,12 +14,13 @@ clear all; close all; clc; format long g;
         'goes'          GOES-4
         'gps'           BIIR-2
         'grace'         GRACE-2
+        'iridium'       Iridium 73
         'lageos'        LAGEOS-1
         'planet'        DOVE-2
         'noaa'          NOAA 06
         'zarya'         ISS
 %}
-options.file = 'noaa';
+options.file = 'iridium';
 
 %% Settings
 
@@ -36,7 +39,7 @@ if strcmp(options.thrust,'no')
 end
 
 %...Show figures
-options.showfig = 'no';
+options.showfig = 'yes';
 
 %...Ignore first XXX percent of data
 options.ignore = 0.05;

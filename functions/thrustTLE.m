@@ -21,7 +21,8 @@ factor = options.factor;
 limit = options.limit;
 
 %...Change in orbital elements
-lower = floor(ignore*size(kepler,1));
+lower = ceil(ignore*size(kepler,1));
+lower(lower==0) = 1;
 da = diff(kepler(lower:end,2));
 de = diff(kepler(lower:end,3));
 di = diff(kepler(lower:end,4));
@@ -61,7 +62,7 @@ locs = {locs_a,locs_e,locs_i,locs_O,locs_o};
 
 %...Check for repetitions
 thrustDays = [];
-for i = 1:5
+for i = 1:3
     for j = 1+i:5
         if i ~= j
             thrustDays = vertcat(thrustDays,intersect(kepler(locs{i},1),kepler(locs{j},1)));
@@ -75,7 +76,7 @@ thrustPeriods = [];
 if ~isempty(thrustDays)
     separation = diff(thrustDays);
     where = [0;find(separation>limit);size(separation,1)+1]+1;
-    disp([newline,'Periods where trhust was detected:'])
+    disp([newline,'Periods where thrust was detected:'])
     for i = 1:size(where,1)-1
         thrustPeriods(i,:) = [floor(thrustDays(where(i))),ceil(thrustDays(where(i+1)-1))];
         disp([num2str(i),char(9),num2str(floor(thrustDays(where(i)))),' - ',num2str(ceil(thrustDays(where(i+1)-1)))])
