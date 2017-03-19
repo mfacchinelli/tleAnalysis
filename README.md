@@ -9,6 +9,7 @@ Included files:
  - `subplotTitle.m`:  MATLAB function for adding a title to the whole subplot
  
 Included folders:
+ - `functions`:      functions used for the analysis of TLE file
  - `files`:          various text files filled with TLE lines of various spacecraft or debris
  - `figures`:        plots of Keplerian elements of spacecraft under `files`
  - `documentation`:  sources of information (bibliography)
