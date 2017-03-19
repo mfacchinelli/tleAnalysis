@@ -10,9 +10,10 @@
 %                   3) limit:       minimum separation in days between two
 %                                   distinct thrusting maneuvers
 % Output:
-%   - N/A
+%   - thrustPeriods:    array with lower and upper bounds for thrust
+%                       periods, in days
 
-function thrustTLE(kepler,options)
+function thrustPeriods = thrustTLE(kepler,options)
 
 %...Extract options
 ignore = options.ignore;
@@ -61,8 +62,8 @@ locs = {locs_a,locs_e,locs_i,locs_O,locs_o};
 %...Check for repetitions
 thrustDays = [];
 for i = 1:5
-    for j = 1:5
-        if 1 ~= j
+    for j = 1+i:5
+        if i ~= j
             thrustDays = vertcat(thrustDays,intersect(kepler(locs{i},1),kepler(locs{j},1)));
         end
     end
@@ -70,12 +71,38 @@ end
 thrustDays = unique(thrustDays);
 
 %...Find thurst periods
+thrustPeriods = [];
 if ~isempty(thrustDays)
     separation = diff(thrustDays);
     where = [0;find(separation>limit);size(separation,1)+1]+1;
     disp([newline,'Periods where trhust was detected:'])
     for i = 1:size(where,1)-1
+        thrustPeriods(i,:) = [floor(thrustDays(where(i))),ceil(thrustDays(where(i+1)-1))];
         disp([num2str(i),char(9),num2str(floor(thrustDays(where(i)))),' - ',num2str(ceil(thrustDays(where(i+1)-1)))])
+    end
+    
+    %...Plot periods of thrust overlaid to Keplerian elements
+    if strcmp(options.showfig,'yes')
+        figure;
+        labels = {'a [m]','e [-]','i [deg]','\Omega [deg]','\omega [deg]','\vartheta [deg]'};
+        for i = 1:size(kepler,2)-1
+            subplot(3,2,i)
+            hold on
+            plot(kepler(:,1),kepler(:,i+1))
+            ax = gca;
+            ylimit = ax.YLim;
+            for j = 1:size(thrustPeriods,1)
+                pos = [thrustPeriods(j,1),ylimit(1),diff(thrustPeriods(j,:)),ylimit(2)];
+                rectangle('Position',pos,'FaceColor',[0.95,0.5,0.5,0.5])
+            end
+            hold off
+            xlabel('Time [day]')
+            ylabel(labels{i})
+            xlim([kepler(1,1),kepler(end,1)])
+            ylim(ylimit)
+            grid on
+            set(gca,'FontSize',13)
+        end
     end
 else
     disp([newline,'No thrust was detected.'])

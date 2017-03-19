@@ -17,7 +17,7 @@ clear all; close all; clc; format long g;
         'noaa'          NOAA 06
         'zarya'         ISS
 %}
-options.file = 'zarya';
+options.file = 'noaa';
 
 %% Settings
 
@@ -56,7 +56,7 @@ kepler = data.orbit;
 %% Thrust detection
 
 options.ID = data.ID;
-thrustTLE(kepler,options)
+thrustPeriods = thrustTLE(kepler,options);
 
 %% End
 
