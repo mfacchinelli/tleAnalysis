@@ -1,3 +1,5 @@
+%  MATLAB Function < subplotTitle >
+%
 %  Purpose:     give overall title to subplots
 %  Input:
 %   - title:    string with title name
