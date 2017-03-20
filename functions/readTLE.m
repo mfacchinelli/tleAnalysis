@@ -10,7 +10,7 @@
 %  Output:
 %   - extract:  structure array containing: 
 %                   1) ID:          satellite identifier
-%                   2) kepler:      time of TLE measurements and corresponding 
+%                   2) orbit:       time of TLE measurements and corresponding 
 %                                   Keplerian elements (t,a,e,i,O,o,TA)
 %                   3) propagator:  data for propagation for each
 %                                   observation time (nd,ndd,Bstar)

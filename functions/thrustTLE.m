@@ -62,7 +62,7 @@ locs = {locs_a,locs_e,locs_i,locs_O,locs_o};
 
 %...Check for repetitions
 thrustDays = [];
-for i = 1:3
+for i = 1:3 % do not use O and o together (more likely to give false positives)
     for j = 1+i:5
         if i ~= j
             thrustDays = vertcat(thrustDays,intersect(kepler(locs{i},1),kepler(locs{j},1)));

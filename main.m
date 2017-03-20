@@ -20,7 +20,7 @@ addpath functions/
         'noaa'          NOAA 06
         'zarya'         ISS
 %}
-options.file = 'iridium';
+options.file = 'zarya';
 
 %% Settings
 
@@ -39,10 +39,10 @@ if strcmp(options.thrust,'no')
 end
 
 %...Show figures
-options.showfig = 'yes';
+options.showfig = 'no';
 
 %...Ignore first XXX percent of data
-options.ignore = 0.05;
+options.ignore = 0.01;
 
 %...Safety factor for thrust detection
 options.factor = 1.5;
