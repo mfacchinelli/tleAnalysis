@@ -20,7 +20,7 @@ addpath functions/
         'noaa'          NOAA 06
         'zarya'         ISS
 %}
-options.file = 'zarya';
+options.file = 'grace';
 
 %% Settings
 
