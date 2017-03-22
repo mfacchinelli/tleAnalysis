@@ -1,7 +1,7 @@
 % DRIVER                                                   3 NOV 80
 % WGS-72 PHYSICAL AND GEOPOTENTIAL CONSTANTS
 %        CK2= .5*J2*AE**2     CK4=-.375*J4*AE**4
-
+%booooo
 clc;
 clear all;
 close all;
