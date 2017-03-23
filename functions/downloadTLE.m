@@ -28,19 +28,19 @@ end
 
 if present == false
     %...User data
-    username = 'm.facchinelli@student.tudelft.nl';
+    username = 'M.Facchinelli@student.tudelft.nl';
     password = 'EVx-wbL-JWM-u28';
 
     %...Define dates
-    start = 1980-01-01;
-    stop = 2018-01-01;
+    start = '1980-01-01';
+    stop = '2018-01-01';
 
     %...URL and links
     URL = 'https://www.space-track.org/ajaxauth/login';
 
     link = ['https://www.space-track.org/basicspacedata/',...
             'query/class/tle/',...
-            'EPOCH/',start,'--',stop,'/NORAD_CAT_ID/',num2str(satID),'/',...
+            'EPOCH/',start,'--',stop,'/NORAD_CAT_ID/',satID,'/',...
             'orderby/TLE_LINE1 ASC/format/tle'];
 
     post = {'identity',username,...
@@ -49,4 +49,5 @@ if present == false
 
     %...Write to file
     urlwrite(URL,['files/',filename,'.txt'],'Post',post,'Timeout',20);
+    pause(5)
 end

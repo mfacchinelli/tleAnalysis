@@ -11,24 +11,25 @@ Te = 23*3600+56*60+4.1004;  % [s]       Earth sidereal day
 
 %{  
     Choose NORAD ID and file name from:
-                        'amateur'       Amateur Radio
-                        'cryosat'       CryoSat-2
-                        'debris'        COSMOS Debris
-                        'delfic3'       Delfi C3
-        '2002-009A'     'envisat'       ENVISAT
-                        'goce'          GOCE
-                        'goes'          GOES-4
-                        'gps'           BIIR-2
-                        'grace'         GRACE-2
-                        'iridium'       Iridium 73
-                        'lageos'        LAGEOS-1
-        '1980-073A'     'meteor'        METEOR 2-06
-                        'planet'        DOVE-2
-                        'noaa'          NOAA 06
-                        'zarya'         ISS
+        '14129'         'amateur'       Amateur Radio
+        '36508'         'cryosat'       CryoSat-2
+        '34393'         'debris'        COSMOS Debris
+        '32789'         'delfic3'       Delfi C3
+        '27386'         'envisat'       ENVISAT
+        '34602'         'goce'          GOCE
+        '11964'         'goes'          GOES-4
+        '24876'         'gps'           BIIR-2
+        '27392'         'grace'         GRACE-2
+        '25346'         'iridium'       Iridium 73
+        '08820'         'lageos'        LAGEOS-1
+        '11962'         'meteor'        METEOR 2-06
+        '11416'         'noaa'          NOAA 06
+        '39132'         'planet'        DOVE-2
+        '25544'         'zarya'         ISS
 %}
-options.norID = '1980-073A';
-options.file = 'meteor';
+
+options.norID = '11962';    % NORAD ID
+options.file = 'meteor';    % file name
 
 downloadTLE(options)
 
