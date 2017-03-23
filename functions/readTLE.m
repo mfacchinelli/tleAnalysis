@@ -20,6 +20,9 @@ function extract = readTLE(options)
 %...Global constants
 global mu Te
 
+%...Download TLE if not available yet (source: space-track.org)
+downloadTLE(options)
+
 %...Extract options
 file = options.file;
 showfig = options.showfig;
@@ -59,12 +62,12 @@ disp(['First observation on day ',num2str(dayInit),', year ',num2str(yearInit),'
 disp(['Last observation on day ',num2str(dayEnd),', year ',num2str(yearEnd),'.'])
 
 %...Decode Keplerian elements
-i = deg2rad(str2double(read{12}));          % [rad]     inclination
-O = deg2rad(str2double(read{13}));          % [rad]     right ascension of ascending node
-e = str2double(read{14})./1e7;              % [-]       eccentricity
-o = deg2rad(str2double(read{15}));          % [rad]     argument of perigee
-MA = deg2rad(str2double(read{16}));         % [rad]     mean anomaly
-n = 2*pi*str2double(read{17})./(3600*24);   % [rad/s]   mean motion
+i = deg2rad(str2double(read{12}));  % [rad]     inclination
+O = deg2rad(str2double(read{13}));  % [rad]     right ascension of ascending node
+e = str2double(read{14})./1e7;      % [-]       eccentricity
+o = deg2rad(str2double(read{15}));  % [rad]     argument of perigee
+MA = deg2rad(str2double(read{16})); % [rad]     mean anomaly
+n = 2*pi*str2double(read{17})./Te;  % [rad/s]   mean motion
 
 %...Decode variables for propagation
 nd = 2*pi*str2double(read{5})./(60*24)^2;	% [rad/min^2]	first derivative of mean motion
@@ -84,7 +87,7 @@ exponent(exponent>0) = -exponent(exponent>0); % force exponents to negative
 Bstar = decimal.*10.^(exponent-5);  % [1/Re]    drag term
 
 %...Compute semi-major axis
-a = ((Te./(2*pi*n)).^2*mu).^(1/3);	% [m]	semi-major axis
+a = (mu./n.^2).^(1/3);  % [m]	semi-major axis
 
 %...Compute true anomaly
 EA = MA.*ones(size(MA));

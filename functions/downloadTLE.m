@@ -12,13 +12,13 @@
 function downloadTLE(options)
 
 %...Extract
-filename = options.file;
+filename = replace(options.file,'files/','');
 satID = options.norID;
 
 %...Check if file already exists
 files = dir('files/*.txt');
 for file = files'
-    if strcmp([filename,'.txt'],file.name)
+    if strcmp(filename,file.name)
         present = true;
         break
     else
