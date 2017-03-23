@@ -49,5 +49,5 @@ if present == false
 
     %...Write to file
     urlwrite(URL,['files/',filename,'.txt'],'Post',post,'Timeout',20);
-    pause(5)
+    pause(10) % give time to download
 end

@@ -20,6 +20,7 @@ TEMP = (QO-SO)*AE/6378.136;
 QOMS2T = TEMP*TEMP*TEMP*TEMP;
 
 %% RECOVER ORIGINAL MEAN MOTION (XNODP) AND SEMIMAJOR AXIS (AODP) FROM INPUT ELEMENTS
+
 IFLAG = 1;
 if (IFLAG == 1)
     A1 = power((0.743669161E-1/XNO),2/3);
@@ -110,6 +111,7 @@ if (IFLAG == 1)
 end
 
 %% Update for Secular Gravity and Atmospheric Drag
+
 XMDF = XMO+XMDOT*TSINCE;
 OMGADF = OMEGAO+OMGDOT*TSINCE;
 XNODDF = XNODEO+XNODOT*TSINCE;
@@ -140,6 +142,7 @@ BETA = sqrt(1.-E*E);
 XN = 0.743669161E-1/power(A,1.5);
 
 %% Long Period Periodics
+
 AXN = E*cos(OMEGA);
 TEMP = 1./(A*BETA*BETA);
 XLL = TEMP*XLCOF*AXN;
@@ -148,6 +151,7 @@ XLT = XL+XLL;
 AYN = E*sin(OMEGA)+AYNL;
 
 %% Solve Keplers Equation
+
 CAPU = wrapTo2Pi(XLT-XNODE);
 TEMP2 = CAPU;
 for i=1:10
@@ -165,6 +169,7 @@ for i=1:10
 end
 
 %% Short Period Preliminary Quantities
+
 ECOSE = TEMP5+TEMP6;
 ESINE = TEMP3-TEMP4;
 ELSQ = AXN*AXN+AYN*AYN;
@@ -187,6 +192,7 @@ TEMP1 = CK2*TEMP;
 TEMP2 = TEMP1*TEMP;
 
 %% Update for Short Periodics
+
 RK = R*(1.-1.5*TEMP2*BETAL*X3THM1)+.5*TEMP1*X1MTH2*COS2U;
 UK = U-.25*TEMP2*X7THM1*SIN2U;
 XNODEK = XNODE+1.5*TEMP2*COSIO*SIN2U;
@@ -195,6 +201,7 @@ RDOTK = RDOT-XN*TEMP1*X1MTH2*SIN2U;
 RFDOTK = RFDOT+XN*TEMP1*(X1MTH2*COS2U+1.5*X3THM1);
 
 %% Orientation Vectors
+
 SINUK = sin(UK);
 COSUK = cos(UK);
 SINIK = sin(XINCK);
@@ -211,6 +218,7 @@ VY = XMY*COSUK-SINNOK*SINUK;
 VZ = SINIK*COSUK;
 
 %% Position and Velocity
+
 X = RK*UX;
 Y = RK*UY;
 Z = RK*UZ;

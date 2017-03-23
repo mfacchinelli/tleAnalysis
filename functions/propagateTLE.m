@@ -10,9 +10,10 @@
 %                   3) propagator:  data for propagation for each
 %                                   observation time (nd,ndd,Bstar)
 %  Output:
-%   - cart
+%   - kepler:   array containing Keplerian elements in SI units with order:
+%               [t,a,e,i,O,o,TA,MA]
 
-function cart = propagateTLE(extract)
+function kepler = propagateTLE(extract)
 
 t = extract.orbit(:,1)*(24*60);     % [min]     time
 MA = extract.orbit(:,8);            % [rad]     mean anomaly
@@ -23,6 +24,10 @@ i = extract.orbit(:,4);             % [rad]     inclination
 n = extract.propagator(:,1);        % [rad/min] mean motion
 Bstar = extract.propagator(:,4);    % [1/Re]    drag term
 
-for j = 1:size(t,1)
-    cart(j,:) = horzcat(t(j),SGP4(t(j),MA(j),o(j),O(j),e(j),i(j),n(j),Bstar(j)));
+%...Propagate
+for j = 2:size(t,1)
+    cartesian(j,:) = horzcat(t(j),SGP4(t(j)-t(j-1),MA(j),o(j),O(j),e(j),i(j),n(j),Bstar(j)));
 end
+
+%...Covert to Keplerian elements
+kepler = cart2kepl(cartesian);

@@ -1,7 +1,7 @@
-clear all; close all; clc; format long g;
+clear; close all; clc; format long g;
 addpath functions/ propagation/
 
-%...Globla constants
+%...Global constants
 global mu Re Te
 mu = 398600.441e9;          % [m3/s2]   Earth gravitational parameter
 Re = 6378.136e3;            % [m]       Earth radius
@@ -31,6 +31,7 @@ Te = 23*3600+56*60+4.1004;  % [s]       Earth sidereal day
 options.norID = '11962';    % NORAD ID
 options.file = 'meteor';    % file name
 
+%...Download TLE if not available yet (source: space-track.org)
 downloadTLE(options)
 
 %% Settings
@@ -43,7 +44,7 @@ downloadTLE(options)
 options.thrust = true;
 
 %...Show figures
-options.showfig = false;
+options.showfig = true;
 
 %...Ignore first XX percent of data
 options.ignore = 0.01;

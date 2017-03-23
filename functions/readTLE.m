@@ -17,6 +17,7 @@
 
 function extract = readTLE(options)
 
+%...Global constants
 global mu Te
 
 %...Extract options
@@ -66,13 +67,13 @@ MA = deg2rad(str2double(read{16}));	% [rad]     mean anomaly
 n = str2double(read{17});           % [rad/s]   mean motion
 
 %...Decode variables for propagation
-nd = 4*pi*str2double(read{5})./(60*24)^2;	% [rad/min^2]	first derivative of mean motion
+nd = 2*pi*str2double(read{5})./(60*24)^2;	% [rad/min^2]	first derivative of mean motion
 
 ndd = char(read{6});
 decimal = str2double(string(ndd(:,1:end-3)));
 exponent = str2double(string(ndd(:,end-1:end)));
 exponent(exponent>0) = -exponent(exponent>0); % force exponents to negative
-ndd = 12*pi*decimal.*10.^exponent./(60*24)^3;   % [rad/min^3]   second derivative of mean motion
+ndd = 2*pi*decimal.*10.^exponent./(60*24)^3;    % [rad/min^3]   second derivative of mean motion
 
 Bstar = char(read{7});
 decimal = str2double(string(Bstar(:,1:5)));
