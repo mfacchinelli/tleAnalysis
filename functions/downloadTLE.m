@@ -48,6 +48,6 @@ if present == false
             'query',link};
 
     %...Write to file
-    urlwrite(URL,['files/',filename,'.txt'],'Post',post,'Timeout',20);
+    urlwrite(URL,['files/',filename],'Post',post,'Timeout',20);
     pause(10) % give time to download
 end

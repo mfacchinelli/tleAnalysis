@@ -27,7 +27,7 @@ constants()
 %}
 
 norID = ''; % NORAD ID
-file = '23789'; % file name
+file = 'delfic3'; % file name
 
 %% Settings
 
@@ -42,7 +42,8 @@ options = struct('norID',   norID,...                   % NORAD ID
                  'showfig', false,...                   % show figures
                  'ignore',  0.01,...                    % ignore first XX percent of data
                  'factor',  1.5,...                     % safety factor for thrust detection
-                 'limit',   50);                        % limit for days of separations between maneuvers
+                 'limit',   50,...                      % limit for days of separations between maneuvers
+                 'offset',  1);
 
 %...Make sure selection is intentional
 if options.thrust == false
@@ -61,9 +62,25 @@ keplerTLE = data.orbit;
 
 %% Thrust detection
 
-keplerProp = propagateTLE(data);
+keplerProp = propagateTLE(options,data);
 options.ID = data.ID;
 % thrustPeriods = thrustTLE(kepler,options);
+
+%% Test
+
+k = options.offset;
+for i = 1:size(keplerProp,2)-2
+    subplot(3,2,i)
+    plot(keplerProp(:,1),keplerProp(:,i+1)-keplerTLE((k+1):k:end,i+1))
+    xlim([keplerProp(1,1),keplerProp(end,1)])
+    grid on
+    set(gca,'FontSize',13)
+end
+
+mean(keplerProp(:,2)-keplerTLE((k+1):k:end,2))
+std(keplerProp(:,2)-keplerTLE((k+1):k:end,2))
+max(keplerProp(:,2)-keplerTLE((k+1):k:end,2))
+min(keplerProp(:,2)-keplerTLE((k+1):k:end,2))
 
 %% End
 
