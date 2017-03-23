@@ -28,8 +28,8 @@ Te = 23*3600+56*60+4.1004;  % [s]       Earth sidereal day
         '25544'         'zarya'         ISS
 %}
 
-options.norID = '11962';    % NORAD ID
-options.file = 'meteor';    % file name
+options.norID = ''; % NORAD ID
+options.file = '23789'; % file name
 
 %...Download TLE if not available yet (source: space-track.org)
 downloadTLE(options)
@@ -44,7 +44,7 @@ downloadTLE(options)
 options.thrust = true;
 
 %...Show figures
-options.showfig = true;
+options.showfig = false;
 
 %...Ignore first XX percent of data
 options.ignore = 0.01;
@@ -61,16 +61,19 @@ if options.thrust == false
     input(['Press enter to confirm that this spacecraft has no thrust.',newline])
 end
 
+%...Convert file name
+options.file = ['files/',options.file,'.txt'];
+
 %% Decode TLE
 
-options.file = ['files/',options.file,'.txt'];
 data = readTLE(options);
-kepler = data.orbit;
+keplerTLE = data.orbit;
 
 %% Thrust detection
 
+keplerProp = propagateTLE(data);
 options.ID = data.ID;
-thrustPeriods = thrustTLE(kepler,options);
+% thrustPeriods = thrustTLE(kepler,options);
 
 %% End
 

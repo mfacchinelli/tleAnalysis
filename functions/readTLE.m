@@ -59,27 +59,29 @@ disp(['First observation on day ',num2str(dayInit),', year ',num2str(yearInit),'
 disp(['Last observation on day ',num2str(dayEnd),', year ',num2str(yearEnd),'.'])
 
 %...Decode Keplerian elements
-i = deg2rad(str2double(read{12}));  % [rad]     inclination
-O = deg2rad(str2double(read{13}));  % [rad]     right ascension of ascending node
-e = str2double(read{14})./1e7;      % [-]       eccentricity
-o = deg2rad(str2double(read{15}));  % [rad]     argument of perigee
-MA = deg2rad(str2double(read{16}));	% [rad]     mean anomaly
-n = str2double(read{17});           % [rad/s]   mean motion
+i = deg2rad(str2double(read{12}));          % [rad]     inclination
+O = deg2rad(str2double(read{13}));          % [rad]     right ascension of ascending node
+e = str2double(read{14})./1e7;              % [-]       eccentricity
+o = deg2rad(str2double(read{15}));          % [rad]     argument of perigee
+MA = deg2rad(str2double(read{16}));         % [rad]     mean anomaly
+n = 2*pi*str2double(read{17})./(3600*24);   % [rad/s]   mean motion
 
 %...Decode variables for propagation
 nd = 2*pi*str2double(read{5})./(60*24)^2;	% [rad/min^2]	first derivative of mean motion
 
 ndd = char(read{6});
 decimal = str2double(string(ndd(:,1:end-3)));
+decimal(decimal<1e4) = decimal(decimal<1e4)*10; % force number of digits 
 exponent = str2double(string(ndd(:,end-1:end)));
 exponent(exponent>0) = -exponent(exponent>0); % force exponents to negative
-ndd = 2*pi*decimal.*10.^exponent./(60*24)^3;    % [rad/min^3]   second derivative of mean motion
+ndd = 2*pi*decimal.*10.^(exponent-5)./(60*24)^3;	% [rad/min^3]   second derivative of mean motion
 
 Bstar = char(read{7});
 decimal = str2double(string(Bstar(:,1:5)));
+decimal(decimal<1e4) = decimal(decimal<1e4)*10; % force number of digits 
 exponent = str2double(string(Bstar(:,end-1:end)));
 exponent(exponent>0) = -exponent(exponent>0); % force exponents to negative
-Bstar = decimal.*10.^exponent;	% [1/Re]	drag term
+Bstar = decimal.*10.^(exponent-5);  % [1/Re]    drag term
 
 %...Compute semi-major axis
 a = ((Te./(2*pi*n)).^2*mu).^(1/3);	% [m]	semi-major axis
@@ -102,7 +104,7 @@ MA = MA(where); n = n(where); nd = nd(where); ndd = ndd(where); Bstar = Bstar(wh
 
 %...Combine Keplerian elements
 kepler = horzcat(t,a,e,i,O,o,TA,MA);
-propagation = horzcat(n/60,nd,ndd,Bstar);
+propagation = horzcat(n.*60,nd,ndd,Bstar); % convert mean motion to rad/min
 
 %...Plot results
 if showfig == true
