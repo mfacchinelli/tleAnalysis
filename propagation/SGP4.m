@@ -218,7 +218,7 @@ XDOT = RDOTK*UX+RFDOTK*VX;
 YDOT = RDOTK*UY+RFDOTK*VY;
 ZDOT = RDOTK*UZ+RFDOTK*VZ;
 
-cart(1) = X; cart(2) = Y; cart(3) = Z;
-cart(4) = XDOT; cart(5) = YDOT; cart(6) = ZDOT;
+cart(1) = X*6378.136e3; cart(2) = Y*6378.136e3; cart(3) = Z*6378.136e3;
+cart(4) = XDOT*6378.136e3*1440/86400; cart(5) = YDOT*6378.136e3*1440/86400; cart(6) = ZDOT*6378.136e3*1440/86400;
 
 end

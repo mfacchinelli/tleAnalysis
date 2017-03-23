@@ -1,23 +1,52 @@
-% startdate = '2000-01-01';
-% enddate = '2017-09-03';
+%  MATLAB Function < downloadTLE >
+% 
+%  Purpose:     download TLE from space-track.org
+%  Input:
+%   - options:  structure array containing:
+%                   1) file:	file name to be read, to extract TLE 
+%                               information
+%                   2) satID:   satellite NORAD ID
+%  Output:
+%   - N/A
 
-function downloadTLE(satID,filename,date,user)
+function downloadTLE(options)
 
-date.start = start;
-date.stop = stop;
-user.name = username;
-user.code = password;
+%...Extract
+filename = options.file;
+satID = options.norID;
 
-URL = 'https://www.space-track.org/ajaxauth/login';
+%...Check if file already exists
+files = dir('files/*.txt');
+for file = files'
+    if strcmp([filename,'.txt'],file.name)
+        present = true;
+        break
+    else
+        present = false;
+    end
+end
 
-link = ['https://www.space-track.org/basicspacedata/',...
-        'query/class/tle/',...
-        'EPOCH/',start,'--',stop,'/NORAD_CAT_ID/',num2str(satID),'/',...
-        'orderby/TLE_LINE1 ASC/format/tle'];
+if present == false
+    %...User data
+    username = 'm.facchinelli@student.tudelft.nl';
+    password = 'EVx-wbL-JWM-u28';
 
-post = {'identity',username,...
-        'password',password,...
-        'query',link};
+    %...Define dates
+    start = 1980-01-01;
+    stop = 2018-01-01;
 
-urlwrite(URL,filename,'Post',post,'Timeout',20);
-% pause(5);
+    %...URL and links
+    URL = 'https://www.space-track.org/ajaxauth/login';
+
+    link = ['https://www.space-track.org/basicspacedata/',...
+            'query/class/tle/',...
+            'EPOCH/',start,'--',stop,'/NORAD_CAT_ID/',num2str(satID),'/',...
+            'orderby/TLE_LINE1 ASC/format/tle'];
+
+    post = {'identity',username,...
+            'password',password,...
+            'query',link};
+
+    %...Write to file
+    urlwrite(URL,['files/',filename,'.txt'],'Post',post,'Timeout',20);
+end
