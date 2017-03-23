@@ -4,10 +4,11 @@
 %  Input:
 %   - kepler:   Keplerian elements of satellite to be analyzed 
 %   - options:  structure array containing:
-%                   1) ignore:      percent of data to ignore at beginning
+%                   1) showfig:     command whether to show plots
+%                   2) ignore:      percent of data to ignore at beginning
 %                                   of observations
-%                   2) factor:      safety factor for thrust detection
-%                   3) limit:       minimum separation in days between two
+%                   3) factor:      safety factor for thrust detection
+%                   4) limit:       minimum separation in days between two
 %                                   distinct thrusting maneuvers
 % Output:
 %   - thrustPeriods:    array with lower and upper bounds for thrust
@@ -16,6 +17,7 @@
 function thrustPeriods = thrustTLE(kepler,options)
 
 %...Extract options
+showfig = options.showfig;
 ignore = options.ignore;
 factor = options.factor;
 limit = options.limit;
@@ -83,7 +85,7 @@ if ~isempty(thrustDays)
     end
     
     %...Plot periods of thrust overlaid to Keplerian elements
-    if strcmp(options.showfig,'yes')
+    if showfig == true
         figure;
         labels = {'a [m]','e [-]','i [deg]','\Omega [deg]','\omega [deg]','\vartheta [deg]'};
         for i = 1:size(kepler,2)-1

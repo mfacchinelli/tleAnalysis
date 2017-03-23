@@ -1,5 +1,11 @@
 clear all; close all; clc; format long g;
-addpath functions/
+addpath functions/ propagation/
+
+%...Globla constants
+global mu Re Te
+mu = 398600.441e9;          % [m3/s2]   Earth gravitational parameter
+Re = 6378.136e3;            % [m]       Earth radius
+Te = 23*3600+56*60+4.1004;  % [s]       Earth sidereal day
 
 %% Input file 
 
@@ -20,28 +26,21 @@ addpath functions/
         'noaa'          NOAA 06
         'zarya'         ISS
 %}
-options.file = 'grace';
+options.file = 'envisat';
 
 %% Settings
 
 %{
     Select thrust setting:
-        'no':   for sure satellite has no thrust
-        'na':   no available information/do not know (can be any string
-                except for 'no')
+        false:  for sure satellite has no thrust
+        true:   no available information/do not know
 %}
-options.thrust = 'na';
-
-%...Make sure selection is intentional
-if strcmp(options.thrust,'no')
-    warning('You selected no thrust!')
-    input(['Press enter to confirm that this spacecraft has no thrust.',newline])
-end
+options.thrust = true;
 
 %...Show figures
-options.showfig = 'no';
+options.showfig = true;
 
-%...Ignore first XXX percent of data
+%...Ignore first XX percent of data
 options.ignore = 0.01;
 
 %...Safety factor for thrust detection
@@ -49,6 +48,12 @@ options.factor = 1.5;
 
 %...Limit for days of separations between maneuvers
 options.limit = 50;
+
+%...Make sure selection is intentional
+if options.thrust == false
+    warning('You selected no thrust!')
+    input(['Press enter to confirm that this spacecraft has no thrust.',newline])
+end
 
 %% Decode TLE
 

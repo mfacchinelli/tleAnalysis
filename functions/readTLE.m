@@ -17,14 +17,11 @@
 
 function extract = readTLE(options)
 
+global mu Te
+
 %...Extract options
 file = options.file;
 showfig = options.showfig;
-
-%...Constants
-mu = 398600.441e9;          % [m3/s2]   Earth gravitational parameter
-Re = 6378.136e3;            % [m]       Earth radius
-Te = 23*3600+56*60+4.1004;  % [s]       Earth sidereal day
 
 %...Correct file if first time
 correctTLE(file)
@@ -61,30 +58,30 @@ disp(['First observation on day ',num2str(dayInit),', year ',num2str(yearInit),'
 disp(['Last observation on day ',num2str(dayEnd),', year ',num2str(yearEnd),'.'])
 
 %...Decode Keplerian elements
-i = str2double(read{12});       % [deg]     inclination
-O = str2double(read{13});       % [deg]     right ascension of ascending node
-e = str2double(read{14})./1e7;  % [-]       eccentricity
-o = str2double(read{15});       % [deg]     argument of perigee
-MA = str2double(read{16});      % [deg]     mean anomaly
-n = str2double(read{17});       % [rad/s]   mean motion
+i = deg2rad(str2double(read{12}));  % [rad]     inclination
+O = deg2rad(str2double(read{13}));  % [rad]     right ascension of ascending node
+e = str2double(read{14})./1e7;      % [-]       eccentricity
+o = deg2rad(str2double(read{15}));  % [rad]     argument of perigee
+MA = deg2rad(str2double(read{16}));	% [rad]     mean anomaly
+n = str2double(read{17});           % [rad/s]   mean motion
 
 %...Decode variables for propagation
-nd = 4*pi*str2double(read{5})./(3600*24)^2; % [rad/s^2] first derivative of mean motion
+nd = 4*pi*str2double(read{5})./(60*24)^2;	% [rad/min^2]	first derivative of mean motion
 
 ndd = char(read{6});
 decimal = str2double(string(ndd(:,1:end-3)));
 exponent = str2double(string(ndd(:,end-1:end)));
 exponent(exponent>0) = -exponent(exponent>0); % force exponents to negative
-ndd = 12*pi*decimal.*10.^exponent./(3600*24)^3;     % [rad/s^3] second derivative of mean motion
+ndd = 12*pi*decimal.*10.^exponent./(60*24)^3;   % [rad/min^3]   second derivative of mean motion
 
 Bstar = char(read{7});
 decimal = str2double(string(Bstar(:,1:5)));
 exponent = str2double(string(Bstar(:,end-1:end)));
 exponent(exponent>0) = -exponent(exponent>0); % force exponents to negative
-Bstar = decimal.*10.^exponent*Re;                   % [1/m]     drag term
+Bstar = decimal.*10.^exponent;	% [1/Re]	drag term
 
 %...Compute semi-major axis
-a = ((Te./(2*pi*n)).^2*mu).^(1/3);      % [m]       semi-major axis
+a = ((Te./(2*pi*n)).^2*mu).^(1/3);	% [m]	semi-major axis
 
 %...Compute true anomaly
 EA = MA.*ones(size(MA));
@@ -93,25 +90,25 @@ iter = 0;
 while any(abs(EA-EA_0)>1e-10) && iter < 5e3 % iterative process (with safety break)
     iter = iter+1;
     EA_0 = EA;
-    EA = EA_0 + (MA-EA_0+e.*sind(EA_0))./(1-e.*cosd(EA_0)); % eccentric anomaly
+    EA = EA_0 + (MA-EA_0+e.*sin(EA_0))./(1-e.*cos(EA_0)); % eccentric anomaly
 end
-TA = wrapTo360(2.*atand(sqrt((1+e)./(1-e)).*tand(EA./2)));  % [deg] true anomaly
+TA = wrapTo2Pi(2.*atan(sqrt((1+e)./(1-e)).*tan(EA./2)));  % [rad] true anomaly
 
 %...Remove duplicates
 where = diff(t)~=0; % remove duplicates in time
-t = t(where); a = a(where); e = e(where); i = i(where); O = O(where); o = o(where);
-TA = TA(where); nd = nd(where); ndd = ndd(where); Bstar = Bstar(where);
+t = t(where); a = a(where); e = e(where); i = i(where); O = O(where); o = o(where); TA = TA(where);
+MA = MA(where); n = n(where); nd = nd(where); ndd = ndd(where); Bstar = Bstar(where);
 
 %...Combine Keplerian elements
-kepler = horzcat(t,a,e,i,O,o,TA);
-propagation = horzcat(nd,ndd,Bstar);
+kepler = horzcat(t,a,e,i,O,o,TA,MA);
+propagation = horzcat(n/60,nd,ndd,Bstar);
 
 %...Plot results
-if strcmp(showfig,'yes')
+if showfig == true
     %...Plot Keplerian elements
     figure;
-    labels = {'a [m]','e [-]','i [deg]','\Omega [deg]','\omega [deg]','\vartheta [deg]'};
-    for i = 1:size(kepler,2)-1
+    labels = {'a [m]','e [-]','i [rad]','\Omega [rad]','\omega [rad]','\vartheta [rad]'};
+    for i = 1:size(kepler,2)-2
         subplot(3,2,i)
         plot(kepler(:,1),kepler(:,i+1))
         xlabel('Time [day]')
