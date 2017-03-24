@@ -4,11 +4,11 @@
 %               observation
 %  Input:
 %   - extract:  structure array containing: 
-%                   1) ID:          satellite identifier
-%                   2) orbit:       time of TLE measurements and corresponding 
+%                   1) orbit:       time of TLE measurements and corresponding 
 %                                   Keplerian elements (t,a,e,i,O,o,TA)
-%                   3) propagator:  data for propagation for each
+%                   2) propagator:  data for propagation for each
 %                                   observation time (nd,ndd,Bstar)
+%                   3) offset:      TLEs to skip
 %  Output:
 %   - kepler:   array containing Keplerian elements in SI units with order:
 %               [t,a,e,i,O,o,TA,MA]
@@ -35,20 +35,6 @@ end
 
 %...Covert to Keplerian elements
 kepler = cart2kepl(cartesian);
-
-if options.showfig==true
-    
-    %Plotting propagated vs TLE
-    plot_TLEvPROP(extract.orbit,kepler)
-
-    %Finding residuals to plot(Size is adjusted to account for missing first row!!!)
-    residuals = kepler(:,2:6) - extract.orbit(2:end,2:6);
-    plot_residuals(residuals,kepler(:,1));
-    disp("First state is ignored for plotting")
-    
-else
-    disp("Showfig is set to False - No plots are displayed")
-end
 
 
 

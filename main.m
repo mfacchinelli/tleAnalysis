@@ -58,16 +58,12 @@ clear norID file
 
 %...Extract TLE data
 data = readTLE(options);
-options.norID = data.ID;
-
-%% Propagation
-propagatedKepler = propagateTLE(data,options);
-
+options.ID = data.ID;
 
 %% Thrust detection
 
 %...Detect periods of thrust usage
-thrustPeriods = thrust_detection(data.orbit,propagatedKepler,options);
+thrustPeriods = thrustTLE(data,options);
 
 %% End
 
