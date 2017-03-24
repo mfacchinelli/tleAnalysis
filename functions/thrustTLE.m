@@ -21,7 +21,7 @@ keplerTLE = extract.orbit;
 
 %...Extract options
 showfig = options.showfig;
-ignore = options.ignore;
+% ignore = options.ignore;
 factor = options.factor;
 limit = options.limit;
 

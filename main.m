@@ -8,21 +8,21 @@ constants()
 
 %{  
     Choose NORAD ID and file name from:
-        Amateur Radio   '14129'         'amateur'
-        CryoSat-2       '36508'         'cryosat'       
-        COSMOS Debris   '34393'         'debris'        
-        Delfi C3        '32789'         'delfic3'       
-        ENVISAT         '27386'         'envisat'       
-        GOCE            '34602'         'goce'          
-        GOES-4          '11964'         'goes'          
-        BIIR-2          '24876'         'gps'           
-        GRACE-2         '27392'         'grace'         
-        Iridium 73      '25346'         'iridium'       
-        LAGEOS-1        '08820'         'lageos'        
-        METEOR 2-06     '11962'         'meteor'        
-        NOAA 06         '11416'         'noaa'          
-        DOVE-2          '39132'         'planet'        
-        ISS             '25544'         'zarya'      
+        Amateur Radio   '14129'     'amateur'
+        CryoSat-2       '36508'     'cryosat'       
+        COSMOS Debris   '34393'     'debris'        
+        Delfi C3        '32789'     'delfic3'       
+        ENVISAT         '27386'     'envisat'       
+        GOCE            '34602'     'goce'          
+        GOES-4          '11964'     'goes'          
+        BIIR-2          '24876'     'gps'           
+        GRACE-2         '27392'     'grace'         
+        Iridium 73      '25346'     'iridium'       
+        LAGEOS-1        '08820'     'lageos'        
+        METEOR 2-06     '11962'     'meteor'        
+        NOAA 06         '11416'     'noaa'          
+        DOVE-2          '39132'     'planet'        
+        ISS             '25544'     'zarya'      
     Or insert a custom one.
 %}
 
@@ -36,9 +36,10 @@ file = 'delfic3'; % file name
         false:  for sure satellite has no thrust
         true:   no available information/do not know
 %}
+
 options = struct('norID',   norID,...                   % NORAD ID
                  'file',    ['files/',file,'.txt'],...  % convert file name
-                 'thrust',  false,...                   % (see above)
+                 'thrust',  true,...                    % (see above)
                  'showfig', false,...                   % show figures
                  'ignore',  0.01,...                    % ignore first XX percent of data
                  'factor',  1.5,...                     % safety factor for thrust detection

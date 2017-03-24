@@ -1,5 +1,8 @@
 function [cart] = SGP4(TSINCE,XMO,XNODEO,OMEGAO,EO,XINCL,XNO,BSTAR)
 
+%...Global constants
+global mu Re Ts Tm
+
 % Inputs:
 %   Time [min]
 %   MA [rad]
@@ -10,20 +13,19 @@ function [cart] = SGP4(TSINCE,XMO,XNODEO,OMEGAO,EO,XINCL,XNO,BSTAR)
 %   n [rad/min]
 %   Bstar [1/Re]
 
-AE = 1.;
 QO = 120.0;
 SO = 78.0;
-S = AE*(1.+SO/6378.136);
-CK2 = .5*1.082616E-3*AE*AE;
-CK4 = -.375*-1.65597E-6*AE*AE*AE*AE;
-TEMP = (QO-SO)*AE/6378.136;
+S = (1.+SO/(Re/1e3));
+CK2 = .5*1.082616E-3;
+CK4 = -.375*-1.65597E-6;
+TEMP = (QO-SO)/(Re/1e3);
 QOMS2T = TEMP*TEMP*TEMP*TEMP;
 
 %% RECOVER ORIGINAL MEAN MOTION (XNODP) AND SEMIMAJOR AXIS (AODP) FROM INPUT ELEMENTS
 
 IFLAG = 1;
 if (IFLAG == 1)
-    A1 = power((0.743669161E-1/XNO),2/3);
+    A1 = power((sqrt(mu/Re^3*60^2)/XNO),2/3);
     COSIO = cos(XINCL);
     THETA2 = COSIO*COSIO;
     X3THM1 = 3.*THETA2-1.;
@@ -44,7 +46,7 @@ if (IFLAG == 1)
     % DELTA OMEGA TERM, AND THE DELTA M TERM ARE DROPPED.
     
     ISIMP = 0;
-    if((AODP*(1.-EO)/AE) < (220./6378.136+AE))
+    if((AODP*(1.-EO)/1) < (220/(Re/1e3)+1))
         ISIMP = 1;
     end
     
@@ -53,15 +55,15 @@ if (IFLAG == 1)
     
     S4 = S;
     QOMS24 = QOMS2T;
-    PERIGE = (AODP*(1.-EO)-AE)*6378.136;
+    PERIGE = (AODP*(1.-EO)-1)*(Re/1e3);
     if (PERIGE < 156.)
         if (PERIGE <= 98.)
             S4 = 20.;
         else
             S4 = PERIGE-78.;
         end
-        QOMS24 = power(((120.-S4)*AE/6378.136),4);
-        S4 = S4/6378.136+AE;
+        QOMS24 = power(((120.-S4)/(Re/1e3)),4);
+        S4 = S4/(Re/1e3)+1;
     end
     PINVSQ = 1./(AODP*AODP*BETAO2*BETAO2);
     TSI = 1./(AODP-S4);
@@ -74,8 +76,8 @@ if (IFLAG == 1)
     C2 = COEF1*XNODP*(AODP*(1.+1.5*ETASQ+EETA*(4.+ETASQ))+.75*CK2*TSI/PSISQ*X3THM1*(8.+3.*ETASQ*(8.+ETASQ)));
     C1 = BSTAR*C2;
     SINIO = sin(XINCL);
-    A3OVK2 = --0.253881E-5/CK2*power(AE,3);
-    C3 = COEF*TSI*A3OVK2*XNODP*AE*SINIO/EO;
+    A3OVK2 = --0.253881E-5/CK2*power(1,3);
+    C3 = COEF*TSI*A3OVK2*XNODP*SINIO/EO;
     X1MTH2 = 1.-THETA2;
     C4 = 2.*XNODP*COEF1*AODP*BETAO2*(ETA*(2.+.5*ETASQ)+EO*(.5+2.*ETASQ)-2.*CK2*TSI/(AODP*PSISQ)*(-3.*X3THM1*(1.-2.*EETA+ETASQ*(1.5-.5*EETA))+.75*X1MTH2*(2.*ETASQ-EETA*(1.+ETASQ))*cos(2.*OMEGAO)));
     C5 = 2.*COEF1*AODP*BETAO2*(1.+2.75*(ETASQ+EETA)+EETA*ETASQ);
@@ -89,7 +91,7 @@ if (IFLAG == 1)
     XHDOT1 = -TEMP1*COSIO;
     XNODOT = XHDOT1+(.5*TEMP2*(4.-19.*THETA2)+2.*TEMP3*(3.-7.*THETA2))*COSIO;
     OMGCOF = BSTAR*C3*cos(OMEGAO);
-    XMCOF = -2/3*COEF*BSTAR*AE/EETA;
+    XMCOF = -2/3*COEF*BSTAR/EETA;
     XNODCF = 3.5*BETAO2*XHDOT1*C1;
     T2COF = 1.5*C1;
     XLCOF = .125*A3OVK2*SINIO*(3.+5.*COSIO)/(1.+COSIO);
@@ -139,7 +141,7 @@ A = AODP*power(TEMPA,2);
 E = EO-TEMPE;
 XL = XMP+OMEGA+XNODE+XNODP*TEMPL;
 BETA = sqrt(1.-E*E);
-XN = 0.743669161E-1/power(A,1.5);
+XN = sqrt(mu/Re^3*60^2)/power(A,1.5);
 
 %% Long Period Periodics
 
@@ -177,8 +179,8 @@ TEMP = 1.-ELSQ;
 PL = A*TEMP;
 R = A*(1.-ECOSE);
 TEMP1 = 1./R;
-RDOT = 0.743669161E-1*sqrt(A)*ESINE*TEMP1;
-RFDOT = 0.743669161E-1*sqrt(PL)*TEMP1;
+RDOT = sqrt(mu/Re^3*60^2)*sqrt(A)*ESINE*TEMP1;
+RFDOT = sqrt(mu/Re^3*60^2)*sqrt(PL)*TEMP1;
 TEMP2 = A*TEMP1;
 BETAL = sqrt(TEMP);
 TEMP3 = 1./(1.+BETAL);
@@ -226,7 +228,7 @@ XDOT = RDOTK*UX+RFDOTK*VX;
 YDOT = RDOTK*UY+RFDOTK*VY;
 ZDOT = RDOTK*UZ+RFDOTK*VZ;
 
-cart(1) = X*6378.136e3; cart(2) = Y*6378.136e3; cart(3) = Z*6378.136e3;
-cart(4) = XDOT*6378.136e3*1440/86400; cart(5) = YDOT*6378.136e3*1440/86400; cart(6) = ZDOT*6378.136e3*1440/86400;
+cart(1) = X*Re; cart(2) = Y*Re; cart(3) = Z*Re;
+cart(4) = XDOT*Re*Tm/Ts; cart(5) = YDOT*Re*Tm/Ts; cart(6) = ZDOT*Re*Tm/Ts;
 
 end

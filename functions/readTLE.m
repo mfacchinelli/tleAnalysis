@@ -18,7 +18,7 @@
 function extract = readTLE(options)
 
 %...Global constants
-global mu Te
+global mu Ts Tm
 
 %...Download TLE if not available yet (source: space-track.org)
 downloadTLE(options)
@@ -67,17 +67,17 @@ O = deg2rad(str2double(read{13}));  % [rad]     right ascension of ascending nod
 e = str2double(read{14})./1e7;      % [-]       eccentricity
 o = deg2rad(str2double(read{15}));  % [rad]     argument of perigee
 MA = deg2rad(str2double(read{16})); % [rad]     mean anomaly
-n = 2*pi*str2double(read{17})./Te;  % [rad/s]   mean motion
+n = 2*pi*str2double(read{17})./Ts;  % [rad/s]   mean motion
 
 %...Decode variables for propagation
-nd = 2*pi*str2double(read{5})./(60*24)^2;	% [rad/min^2]	first derivative of mean motion
+nd = 2*pi*str2double(read{5})./Tm^2;	% [rad/min^2]	first derivative of mean motion
 
 ndd = char(read{6});
 decimal = str2double(string(ndd(:,1:end-3)));
 decimal(decimal<1e4) = decimal(decimal<1e4)*10; % force number of digits 
 exponent = str2double(string(ndd(:,end-1:end)));
 exponent(exponent>0) = -exponent(exponent>0); % force exponents to negative
-ndd = 2*pi*decimal.*10.^(exponent-5)./(60*24)^3;	% [rad/min^3]   second derivative of mean motion
+ndd = 2*pi*decimal.*10.^(exponent-5)./Tm^3; % [rad/min^3]	second derivative of mean motion
 
 Bstar = char(read{7});
 decimal = str2double(string(Bstar(:,1:5)));
@@ -87,7 +87,7 @@ exponent(exponent>0) = -exponent(exponent>0); % force exponents to negative
 Bstar = decimal.*10.^(exponent-5);  % [1/Re]    drag term
 
 %...Compute semi-major axis
-a = (mu./n.^2).^(1/3);  % [m]	semi-major axis
+a = (mu./n.^2).^(1/3);	% [m]	semi-major axis
 
 %...Compute true anomaly
 EA = MA.*ones(size(MA));
