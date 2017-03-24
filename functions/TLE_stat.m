@@ -22,7 +22,7 @@ di = residuals(:,3);
 dO = residuals(:,4);
 
 %...Extract options
-satID = options.ID;
+satID = options.norID;
 thrust = options.thrust;
 
 %...Open file

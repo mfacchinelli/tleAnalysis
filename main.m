@@ -39,7 +39,7 @@ file = 'delfic3'; % file name
 options = struct('norID',   norID,...                   % NORAD ID
                  'file',    ['files/',file,'.txt'],...  % convert file name
                  'thrust',  true,...                    % (see above)
-                 'showfig', false,...                   % show figures
+                 'showfig', true,...                   % show figures
                  'ignore',  0.01,...                    % ignore first XX percent of data
                  'factor',  1.5,...                     % safety factor for thrust detection
                  'limit',   50,...                      % limit for days of separations between maneuvers
@@ -58,12 +58,16 @@ clear norID file
 
 %...Extract TLE data
 data = readTLE(options);
-options.ID = data.ID;
+options.norID = data.ID;
+
+%% Propagation
+propagatedKepler = propagateTLE(data,options);
+
 
 %% Thrust detection
 
 %...Detect periods of thrust usage
-thrustPeriods = thrustTLE(data,options);
+thrustPeriods = thrust_detection(data.orbit,propagatedKepler,options);
 
 %% End
 

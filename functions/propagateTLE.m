@@ -35,3 +35,20 @@ end
 
 %...Covert to Keplerian elements
 kepler = cart2kepl(cartesian);
+
+if options.showfig==true
+    
+    %Plotting propagated vs TLE
+    plot_TLEvPROP(extract.orbit,kepler)
+
+    %Finding residuals to plot(Size is adjusted to account for missing first row!!!)
+    residuals = kepler(:,2:6) - extract.orbit(2:end,2:6);
+    plot_residuals(residuals,kepler(:,1));
+    disp("First state is ignored for plotting")
+    
+else
+    disp("Showfig is set to False - No plots are displayed")
+end
+
+
+

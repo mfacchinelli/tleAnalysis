@@ -15,6 +15,8 @@
 
 function thrustPeriods = thrust_detection(kepler_TLE,kepler_PROP,options)
 
+% %...Extract data
+% kepler_TLE = extract.orbit;
 
 %...Extract options
 ignore = options.ignore;
@@ -24,23 +26,26 @@ showfig = options.showfig;
 
 time = kepler_TLE(:,1);
 
+% %...Propagate orbit
+% kepler_PROP = propagateTLE(extract,options);
+
 %...Residuals between propagated values and reference TLE's
 lower = ceil(ignore*size(kepler_TLE,1));
 lower(lower==0) = 1;
-da = kepler_TLE(lower:end,2)-kepler_PROP(lower:end,2);
-de = kepler_TLE(lower:end,3)-kepler_PROP(lower:end,3);
-di = kepler_TLE(lower:end,4)-kepler_PROP(lower:end,4);
-dO = kepler_TLE(lower:end,5)-kepler_PROP(lower:end,5);
+% da = kepler_TLE(lower:end,2)-kepler_PROP(lower:end,2);
+% de = kepler_TLE(lower:end,3)-kepler_PROP(lower:end,3);
+% di = kepler_TLE(lower:end,4)-kepler_PROP(lower:end,4);
+% dO = kepler_TLE(lower:end,5)-kepler_PROP(lower:end,5);
+
+%Ignoring first row of TLE orbit - To be fixed!
+da = kepler_TLE(2:end,2)-kepler_PROP(:,2);
+de = kepler_TLE(2:end,3)-kepler_PROP(:,3);
+di = kepler_TLE(2:end,4)-kepler_PROP(:,4);
+dO = kepler_TLE(2:end,5)-kepler_PROP(:,5);
 
 %...Remove changes of 360 degrees from O and o
 dO(dO>180) = dO(dO>180)-360;
 dO(dO<-180) = dO(dO<-180)+360;
-
-%...Plot both data sets if required
-if showfig == true
-    plot_TLEvPROP(kepler_TLE,kepler_PROP);
-    plot_residuals([da,de,di,dO],time);
-end
 
 %...Get statistics
 data = TLE_stat([da,de,di,dO],options);
@@ -87,7 +92,7 @@ if ~isempty(thrustDays)
     end
     
     %...Plot periods of thrust overlaid to Keplerian elements
-    if strcmp(options.showfig,'yes')
+    if showfig == true
         figure;
         labels = {'a [m]','e [-]','i [deg]','\Omega [deg]','\omega [deg]','\vartheta [deg]'};
         for i = 1:size(kepler_TLE,2)-1
