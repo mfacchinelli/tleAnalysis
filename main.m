@@ -56,31 +56,14 @@ clear norID file
 
 %% Decode TLE
 
-%...Decode
+%...Extract TLE data
 data = readTLE(options);
-keplerTLE = data.orbit;
+options.ID = data.ID;
 
 %% Thrust detection
 
-keplerProp = propagateTLE(options,data);
-options.ID = data.ID;
-% thrustPeriods = thrustTLE(kepler,options);
-
-%% Test
-
-k = options.offset;
-for i = 1:size(keplerProp,2)-2
-    subplot(3,2,i)
-    plot(keplerProp(:,1),keplerProp(:,i+1)-keplerTLE((k+1):k:end,i+1))
-    xlim([keplerProp(1,1),keplerProp(end,1)])
-    grid on
-    set(gca,'FontSize',13)
-end
-
-mean(keplerProp(:,2)-keplerTLE((k+1):k:end,2))
-std(keplerProp(:,2)-keplerTLE((k+1):k:end,2))
-max(keplerProp(:,2)-keplerTLE((k+1):k:end,2))
-min(keplerProp(:,2)-keplerTLE((k+1):k:end,2))
+%...Detect periods of thrust usage
+thrustPeriods = thrustTLE(data,options);
 
 %% End
 

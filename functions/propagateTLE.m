@@ -13,7 +13,7 @@
 %   - kepler:   array containing Keplerian elements in SI units with order:
 %               [t,a,e,i,O,o,TA,MA]
 
-function kepler = propagateTLE(options,extract)
+function kepler = propagateTLE(extract,options)
 
 %...Extract options
 k = options.offset;
