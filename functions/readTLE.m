@@ -106,7 +106,7 @@ t = t(where); a = a(where); e = e(where); i = i(where); O = O(where); o = o(wher
 MA = MA(where); n = n(where); nd = nd(where); ndd = ndd(where); Bstar = Bstar(where);
 
 %...Combine Keplerian elements
-kepler = horzcat(t,a,e,i,O,o,TA,MA)
+kepler = horzcat(t,a,e,i,O,o,TA,MA);
 propagation = horzcat(n.*60,nd,ndd,Bstar); % convert mean motion to rad/min
 
 %...Plot results
