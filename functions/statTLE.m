@@ -30,7 +30,7 @@ fileID = fopen('files/stat.txt','r+');
 data = textscan(fileID,'%s\t%f\t%f\t%f\n','CommentStyle','#');
 
 %...Add information only if no thrust
-if strcmp(thrust,'no')
+if thrust == false
     ids = repmat(satID,4,1);
     means = [mean(da);mean(de);mean(di);mean(dO)];
     stds = [std(da);std(de);std(di);std(dO)];
@@ -50,7 +50,7 @@ fclose(fileID);
 
 %...Collect data
 fileID = fopen('files/stat.txt','r');
-data = textscan(fileID,'%s\t%f\t%f\t%f\n','CommentStyle','#');
+data = textscan(fileID,'%s\t%f\t%f\t%f\t%f\n','CommentStyle','#');
 fclose(fileID);
 
 %...Analyze data

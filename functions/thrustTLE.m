@@ -4,10 +4,11 @@
 %  Input:
 %   - kepler:   Keplerian elements of satellite to be analyzed 
 %   - options:  structure array containing:
-%                   1) ignore:      percent of data to ignore at beginning
+%                   1) showfig:     command whether to show plots
+%                   2) ignore:      percent of data to ignore at beginning
 %                                   of observations
-%                   2) factor:      safety factor for thrust detection
-%                   3) limit:       minimum separation in days between two
+%                   3) factor:      safety factor for thrust detection
+%                   4) limit:       minimum separation in days between two
 %                                   distinct thrusting maneuvers
 % Output:
 %   - thrustPeriods:    array with lower and upper bounds for thrust
@@ -19,19 +20,20 @@ function thrustPeriods = thrustTLE(extract,options)
 keplerTLE = extract.orbit;
 
 %...Extract options
+showfig = options.showfig;
 ignore = options.ignore;
 factor = options.factor;
 limit = options.limit;
-showfig = options.showfig;
 
 %...Propagate orbit
 keplerProp = propagateTLE(extract,options);
 
-%...Residuals between propagated values and reference TLEs
-lower = ceil(ignore*size(keplerTLE,1));
-lower(lower==0) = 1;
+%...Residuals between propagated values and reference TLEs (FIX THIS)
+% lower = ceil(ignore*size(keplerTLE,1));
+% lower(lower==0) = 1;
+lower = 0;
 
-%...Ignoring first row of TLE orbit (to be fixed)
+%...Find residuals
 da = keplerTLE(2:end,2)-keplerProp(:,2);
 de = keplerTLE(2:end,3)-keplerProp(:,3);
 di = keplerTLE(2:end,4)-keplerProp(:,4);
@@ -70,7 +72,7 @@ locs = {locs_a,locs_e,locs_i,locs_O};
 
 %...Check for repetitions
 thrustDays = [];
-for i = 1:3 % do not use O and o together (more likely to give false positives)
+for i = 1:3
     for j = 1+i:4
         if i ~= j
             thrustDays = vertcat(thrustDays,intersect(keplerTLE(locs{i},1),keplerTLE(locs{j},1)));

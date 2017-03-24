@@ -2,5 +2,10 @@
 # 
 # The data that is stored is related to statistics of perturbations for satellites
 # without thrust and at altitudes where perturbations do not play a major role. 
-# Order: satID, mean, std, max, min (for each Keplerian element, i.e. 5 times).
+# Order: satID, mean, std, max, min (for each interesting Keplerian element, 
+# i.e. 4 times).
 #
+08021G	-3.265584e+03	+5.416299e+03	+1.253755e+04	-6.394265e+03
+08021G	-3.929082e-04	+7.795185e-04	+1.379886e-03	-2.793210e-03
+08021G	+6.158002e-05	+5.291170e-05	+9.285528e-05	-9.123354e-05
+08021G	-1.268161e-02	+6.450044e-03	-9.812238e-04	-8.677135e-02
