@@ -5,7 +5,7 @@ global mu Re J2 J4 Ts Tm
 
 % Inputs:
 %   Time [min]
-%   a [km]
+%   a [Re]
 %   MA [rad]
 %   o [rad]
 %   O [rad]
@@ -37,7 +37,7 @@ if (IFLAG == 1)
 %     AO = A1*(1.-DEL1*(.5*2/3+DEL1*(1.+134./81.*DEL1)));
 %     DELO = 1.5*CK2*X3THM1/(AO*AO*BETAO*BETAO2);
 %     XNODP = XNO/(1.+DELO);
-%     AODP = AO/(1.-DELO)
+%     AODP = AO/(1.-DELO);
     
     % Initialization
     

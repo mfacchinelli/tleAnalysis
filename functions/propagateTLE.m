@@ -9,7 +9,7 @@
 %                   2) propagator:  data for propagation for each
 %                                   observation time (nd,ndd,Bstar)
 %   - options:  structure array containing: 
-%                   1) offset:      TLEs to skip
+%                   1) offset:      number of steps to take between observations
 %  Output:
 %   - kepler:   array containing Keplerian elements in SI units with order:
 %               [t,a,e,i,O,o,TA,MA]
@@ -20,18 +20,23 @@ function kepler = propagateTLE(extract,options)
 global Re Tm
 
 %...Extract options
+ignore = options.ignore;
 k = options.offset;
 
-%...Extract data
-t = extract.orbit(:,1)*Tm;          % [min]     time
-a = extract.orbit(:,2)/Re;          % [Re]      semi-major axis
-MA = extract.orbit(:,8);            % [rad]     mean anomaly
-O = extract.orbit(:,5);             % [rad]     right ascension of ascending node
-o = extract.orbit(:,6);             % [rad]     argument of perigee
-e = extract.orbit(:,3);             % [-]       eccentricity
-i = extract.orbit(:,4);             % [rad]     inclination
-n = extract.propagator(:,1);        % [rad/min] mean motion
-Bstar = extract.propagator(:,4);	% [1/Re]    drag term
+%...Ignore intial part of TLE (avoid injection maneuver)
+lower = ceil(ignore*size(extract.orbit,1));
+lower(lower==0) = 1;
+
+%...Extract data and convert to fuc*ed up units
+t = extract.orbit(lower:end,1)*Tm;          % [min]     time
+a = extract.orbit(lower:end,2)/Re;          % [Re]      semi-major axis
+MA = extract.orbit(lower:end,8);            % [rad]     mean anomaly
+O = extract.orbit(lower:end,5);             % [rad]     right ascension of ascending node
+o = extract.orbit(lower:end,6);             % [rad]     argument of perigee
+e = extract.orbit(lower:end,3);             % [-]       eccentricity
+i = extract.orbit(lower:end,4);             % [rad]     inclination
+n = extract.propagator(lower:end,1);        % [rad/min] mean motion
+Bstar = extract.propagator(lower:end,4);	% [1/Re]    drag term
 
 %...Propagate
 for j = (k+1):k:size(t,1)
@@ -40,6 +45,9 @@ end
 
 %...Covert to Keplerian elements
 kepler = cart2kepl(cartesian);
+
+%...Add first observation
+% kepler = vertcat([t(1)/Tm,a(1)*Re,e(1),i(1),O(1),o(1),extract.orbit(lower,7),MA(1)],kepler);
 
 
 

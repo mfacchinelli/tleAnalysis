@@ -10,6 +10,7 @@
 %                   3) factor:      safety factor for thrust detection
 %                   4) limit:       minimum separation in days between two
 %                                   distinct thrusting maneuvers
+%                   5) offset:      number of steps to take between observations
 % Output:
 %   - thrustPeriods:    array with lower and upper bounds for thrust
 %                       periods, in days
@@ -21,23 +22,34 @@ keplerTLE = extract.orbit;
 
 %...Extract options
 showfig = options.showfig;
-% ignore = options.ignore;
+ignore = options.ignore;
 factor = options.factor;
 limit = options.limit;
+k = options.offset;
 
 %...Propagate orbit
 keplerProp = propagateTLE(extract,options);
 
-%...Residuals between propagated values and reference TLEs (FIX THIS)
-% lower = ceil(ignore*size(keplerTLE,1));
-% lower(lower==0) = 1;
-lower = 0;
+%...Ignore intial part of TLE (avoid injection maneuver)
+lower = ceil(ignore*size(keplerTLE,1));
+lower(lower==0) = 1;
 
-%...Find residuals
-da = keplerTLE(2:end,2)-keplerProp(:,2);
-de = keplerTLE(2:end,3)-keplerProp(:,3);
-di = keplerTLE(2:end,4)-keplerProp(:,4);
-dO = keplerTLE(2:end,5)-keplerProp(:,5);
+%...Find residuals and correct for constant offset
+da = keplerTLE(lower+1:k:end,2)-keplerProp(:,2);
+a_offset = median(da); da = da-a_offset;
+keplerProp(:,2) = keplerProp(:,2)+a_offset;
+
+de = keplerTLE(lower+1:k:end,3)-keplerProp(:,3);
+e_offset = median(de); de = de-e_offset;
+keplerProp(:,3) = keplerProp(:,3)+e_offset;
+
+di = keplerTLE(lower+1:k:end,4)-keplerProp(:,4);
+i_offset = median(di); di = di-i_offset;
+keplerProp(:,4) = keplerProp(:,4)+i_offset;
+
+dO = keplerTLE(lower+1:k:end,5)-keplerProp(:,5);
+O_offset = median(dO); dO = dO-O_offset;
+keplerProp(:,5) = keplerProp(:,5)+O_offset;
 
 %...Remove changes of 2pi degrees from O and o
 dO(dO>pi) = dO(dO>pi)-2*pi;
@@ -96,7 +108,7 @@ if ~isempty(thrustDays)
     if showfig == true
         figure;
         labels = {'a [m]','e [-]','i [deg]','\Omega [deg]','\omega [deg]','\vartheta [deg]'};
-        for i = 1:size(keplerTLE,2)-1
+        for i = 1:size(keplerTLE,2)-2
             subplot(3,2,i)
             hold on
             plot(keplerTLE(:,1),keplerTLE(:,i+1))
