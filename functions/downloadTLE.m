@@ -28,8 +28,8 @@ end
 
 if present == false
     %...User data
-    username = 'M.Facchinelli@student.tudelft.nl';
-    password = 'EVx-wbL-JWM-u28';
+    username = input('Please enter a username for space-track.org: ','s');
+    password = input('Please enter the corresponding password: ','s');
 
     %...Define dates
     start = '1980-01-01';
