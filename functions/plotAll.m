@@ -3,11 +3,12 @@
 %  Purpose:     plot observed vs. propagated Keplerian elements and
 %               residuals over time
 %  Input:
-%   - keplerTLE:    observed Keplerian elements
-%   - keplerProp:   propagated Keplerian elements
-%   - residuals:    difference between TLE and Prop
-%   - options:      structure array containing:
-%                       1) offset:  TLEs to skip
+%   - which:    string specifiying which plots to show
+%   - inputs:   cell array of inputs for each specific case
+%   - options:  structure array containing:
+%               	1) file:    file name to be read, to extract TLE 
+%                               information
+%                   2) offset:  Tnumber of steps to take between observations
 % Output:
 %   - N/A
 
