@@ -26,7 +26,7 @@ constants()
     Or insert a custom one.
 %}
 
-norID = '32789'; % NORAD ID
+norID = ''; % NORAD ID
 file = '23789'; % file name
 
 %% Settings
@@ -39,12 +39,12 @@ file = '23789'; % file name
 
 options = struct('norID',   norID,...                   % NORAD ID
                  'file',    ['files/',file,'.txt'],...  % convert file name
-                 'thrust',  true,...                    % (see above)
-                 'showfig', true,...                   % show figures
+                 'thrust',  1,...                       % (see above)
+                 'showfig', 1,...                       % show figures
                  'ignore',  0.01,...                    % ignore first XX percent of data
                  'factor',  1.5,...                     % safety factor for thrust detection
                  'limit',   50,...                      % limit for days of separations between maneuvers
-                 'offset',  1);
+                 'offset',  50);
 
 %...Make sure selection is intentional
 if options.thrust == false

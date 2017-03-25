@@ -35,19 +35,19 @@ lower = ceil(ignore*size(keplerTLE,1));
 lower(lower==0) = 1;
 
 %...Find residuals and correct for constant offset
-da = keplerTLE(lower+1:k:end,2)-keplerProp(:,2);
+da = keplerTLE(lower+k:k:end,2)-keplerProp(:,2);
 a_offset = median(da); da = da-a_offset;
 keplerProp(:,2) = keplerProp(:,2)+a_offset;
 
-de = keplerTLE(lower+1:k:end,3)-keplerProp(:,3);
+de = keplerTLE(lower+k:k:end,3)-keplerProp(:,3);
 e_offset = median(de); de = de-e_offset;
 keplerProp(:,3) = keplerProp(:,3)+e_offset;
 
-di = keplerTLE(lower+1:k:end,4)-keplerProp(:,4);
+di = keplerTLE(lower+k:k:end,4)-keplerProp(:,4);
 i_offset = median(di); di = di-i_offset;
 keplerProp(:,4) = keplerProp(:,4)+i_offset;
 
-dO = keplerTLE(lower+1:k:end,5)-keplerProp(:,5);
+dO = keplerTLE(lower+k:k:end,5)-keplerProp(:,5);
 O_offset = median(dO); dO = dO-O_offset;
 keplerProp(:,5) = keplerProp(:,5)+O_offset;
 
