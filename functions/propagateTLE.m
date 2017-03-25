@@ -24,7 +24,7 @@ k = options.offset;
 
 %...Extract data
 t = extract.orbit(:,1)*Tm;          % [min]     time
-a = extract.orbit(:,2)/Re;          % [m/Re]    semi-major axis
+a = extract.orbit(:,2)/Re;          % [Re]      semi-major axis
 MA = extract.orbit(:,8);            % [rad]     mean anomaly
 O = extract.orbit(:,5);             % [rad]     right ascension of ascending node
 o = extract.orbit(:,6);             % [rad]     argument of perigee
