@@ -18,7 +18,7 @@
 function extract = readTLE(options)
 
 %...Global constants
-global mu Ts Tm
+global mu Re J2 Ts Tm
 
 %...Download TLE if not available yet (source: space-track.org)
 downloadTLE(options)
@@ -67,7 +67,7 @@ O = deg2rad(str2double(read{13}));  % [rad]     right ascension of ascending nod
 e = str2double(read{14})./1e7;      % [-]       eccentricity
 o = deg2rad(str2double(read{15}));  % [rad]     argument of perigee
 MA = deg2rad(str2double(read{16})); % [rad]     mean anomaly
-n = 2*pi*str2double(read{17})./Ts;  % [rad/s]   mean motion
+n = 2*pi*str2double(read{17})./Ts; % mean motion without correction
 
 %...Decode variables for propagation
 nd = 2*pi*str2double(read{5})./Tm^2;	% [rad/min^2]	first derivative of mean motion
@@ -86,8 +86,13 @@ exponent = str2double(string(Bstar(:,end-1:end)));
 exponent(exponent>0) = -exponent(exponent>0); % force exponents to negative
 Bstar = decimal.*10.^(exponent-5);  % [1/Re]    drag term
 
-%...Compute semi-major axis
-a = (mu./n.^2).^(1/3);	% [m]	semi-major axis
+%...Compute semi-major axis and correct mean motion
+a = (mu./n.^2).^(1/3);
+delta = 3/2*(1/2*J2*Re^2)./a.^2.*(3*cos(i).^2-1)./(1-e.^2).^(3/2);
+a = a.*(1-1/3*delta-delta.^2-134/81*delta.^3);
+delta = 3/2*(1/2*J2*Re^2)./a.^2.*(3*cos(i).^2-1)./(1-e.^2).^(3/2);
+n = n./(1+delta);    % [rad/s]   mean motion
+a = a./(1-delta);    % [m]       semi-major axis
 
 %...Compute true anomaly
 EA = MA.*ones(size(MA));

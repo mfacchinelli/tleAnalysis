@@ -1,10 +1,11 @@
-function [cart] = SGP4(TSINCE,XMO,XNODEO,OMEGAO,EO,XINCL,XNO,BSTAR)
+function [cart] = SGP4(TSINCE,AODP,XMO,XNODEO,OMEGAO,EO,XINCL,XNODP,BSTAR)
 
 %...Global constants
-global mu Re Ts Tm
+global mu Re J2 J4 Ts Tm
 
 % Inputs:
 %   Time [min]
+%   a [km]
 %   MA [rad]
 %   o [rad]
 %   O [rad]
@@ -16,8 +17,8 @@ global mu Re Ts Tm
 QO = 120.0;
 SO = 78.0;
 S = (1.+SO/(Re/1e3));
-CK2 = .5*1.082616E-3;
-CK4 = -.375*-1.65597E-6;
+CK2 = .5*J2;
+CK4 = -.375*J4;
 TEMP = (QO-SO)/(Re/1e3);
 QOMS2T = TEMP*TEMP*TEMP*TEMP;
 
@@ -25,18 +26,18 @@ QOMS2T = TEMP*TEMP*TEMP*TEMP;
 
 IFLAG = 1;
 if (IFLAG == 1)
-    A1 = power((sqrt(mu/Re^3*60^2)/XNO),2/3);
+%     A1 = power((sqrt(mu/Re^3*60^2)/XNO),2/3);
     COSIO = cos(XINCL);
     THETA2 = COSIO*COSIO;
     X3THM1 = 3.*THETA2-1.;
     EOSQ = EO*EO;
     BETAO2 = 1.-EOSQ;
     BETAO = sqrt(BETAO2);
-    DEL1 = 1.5*CK2*X3THM1/(A1*A1*BETAO*BETAO2);
-    AO = A1*(1.-DEL1*(.5*2/3+DEL1*(1.+134./81.*DEL1)));
-    DELO = 1.5*CK2*X3THM1/(AO*AO*BETAO*BETAO2);
-    XNODP = XNO/(1.+DELO);
-    AODP = AO/(1.-DELO);
+%     DEL1 = 1.5*CK2*X3THM1/(A1*A1*BETAO*BETAO2);
+%     AO = A1*(1.-DEL1*(.5*2/3+DEL1*(1.+134./81.*DEL1)));
+%     DELO = 1.5*CK2*X3THM1/(AO*AO*BETAO*BETAO2);
+%     XNODP = XNO/(1.+DELO);
+%     AODP = AO/(1.-DELO)
     
     % Initialization
     
@@ -79,7 +80,8 @@ if (IFLAG == 1)
     A3OVK2 = --0.253881E-5/CK2*power(1,3);
     C3 = COEF*TSI*A3OVK2*XNODP*SINIO/EO;
     X1MTH2 = 1.-THETA2;
-    C4 = 2.*XNODP*COEF1*AODP*BETAO2*(ETA*(2.+.5*ETASQ)+EO*(.5+2.*ETASQ)-2.*CK2*TSI/(AODP*PSISQ)*(-3.*X3THM1*(1.-2.*EETA+ETASQ*(1.5-.5*EETA))+.75*X1MTH2*(2.*ETASQ-EETA*(1.+ETASQ))*cos(2.*OMEGAO)));
+    C4 = 2.*XNODP*COEF1*AODP*BETAO2*(ETA*(2.+.5*ETASQ)+EO*(.5+2.*ETASQ)-2.*CK2*TSI/(AODP*PSISQ)*(-3.*X3THM1*(1.-2.*EETA+ETASQ*(1.5-.5*EETA))...
+        +.75*X1MTH2*(2.*ETASQ-EETA*(1.+ETASQ))*cos(2.*OMEGAO)));
     C5 = 2.*COEF1*AODP*BETAO2*(1.+2.75*(ETASQ+EETA)+EETA*ETASQ);
     THETA4 = THETA2*THETA2;
     TEMP1 = 3.*CK2*PINVSQ*XNODP;
