@@ -57,7 +57,7 @@ dO(dO<-pi) = dO(dO<-pi)+2*pi;
 
 %...Show plots
 if showfig == true
-    plotAll(keplerTLE,keplerProp,[da,de,di,dO],options);
+    plotAll('residuals',{keplerTLE,keplerProp,[da,de,di,dO]},options);
 end
 
 %...Get statistics

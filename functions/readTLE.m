@@ -116,28 +116,7 @@ propagation = horzcat(n.*60,nd,ndd,Bstar); % convert mean motion to rad/min
 
 %...Plot results
 if showfig == true
-    %...Plot Keplerian elements
-    figure;
-    labels = {'a [m]','e [-]','i [rad]','\Omega [rad]','\omega [rad]','\vartheta [rad]'};
-    for i = 1:size(kepler,2)-2
-        subplot(3,2,i)
-        plot(kepler(:,1),kepler(:,i+1))
-        xlabel('Time [day]')
-        ylabel(labels{i})
-        xlim([kepler(1,1),kepler(end,1)])
-        grid on
-        set(gca,'FontSize',13)
-    end
-    subplotTitle('Keplerian Elements')
-    saveas(gca,['figures/',file(7:end-4)],'epsc')
-
-    %...Plot histogram of observation frequency
-    figure;
-    histogram(diff(t))
-    xlabel('\Delta t [day]')
-    ylabel('Occurrences [-]')
-    grid on
-    set(gca,'FontSize',13)
+    plotAll('elements',{kepler},options);
 end
 
 %...Struct of extraced data
