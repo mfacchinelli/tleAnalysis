@@ -17,13 +17,14 @@
 function kepler = propagateTLE(extract,options)
 
 %...Global constants
-global Tm
+global Re Tm
 
 %...Extract options
 k = options.offset;
 
 %...Extract data
 t = extract.orbit(:,1)*Tm;          % [min]     time
+a = extract.orbit(:,2)/Re;          % [m/Re]    semi-major axis
 MA = extract.orbit(:,8);            % [rad]     mean anomaly
 O = extract.orbit(:,5);             % [rad]     right ascension of ascending node
 o = extract.orbit(:,6);             % [rad]     argument of perigee
@@ -34,7 +35,7 @@ Bstar = extract.propagator(:,4);	% [1/Re]    drag term
 
 %...Propagate
 for j = (k+1):k:size(t,1)
-    cartesian((j-1)/k,:) = horzcat(t(j)/Tm,SGP4(t(j)-t(j-k),MA(j),O(j),o(j),e(j),i(j),n(j),Bstar(j)));
+    cartesian((j-1)/k,:) = horzcat(t(j)/Tm,SGP4(t(j)-t(j-k),a(j),MA(j),O(j),o(j),e(j),i(j),n(j),Bstar(j)));
 end
 
 %...Covert to Keplerian elements

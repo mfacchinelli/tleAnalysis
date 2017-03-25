@@ -1,4 +1,4 @@
-%  MATLAB Function < propagateTLE >
+%  MATLAB Function < cart2kepl >
 % 
 %  Purpose:	transformation from Cartesian components to Keplerian elements
 %           observation
