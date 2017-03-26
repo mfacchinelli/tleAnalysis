@@ -8,26 +8,25 @@ constants()
 
 %{  
     Choose NORAD ID and file name from:
-        Amateur Radio   '14129'     'amateur'
-        CryoSat-2       '36508'     'cryosat'       
-        COSMOS Debris   '34393'     'debris'        
-        Delfi C3        '32789'     'delfic3'       
-        ENVISAT         '27386'     'envisat'       
-        GOCE            '34602'     'goce'          
-        GOES-4          '11964'     'goes'          
-        BIIR-2          '24876'     'gps'           
-        GRACE-2         '27392'     'grace'         
-        Iridium 73      '25346'     'iridium'       
-        LAGEOS-1        '08820'     'lageos'        
-        METEOR 2-06     '11962'     'meteor'        
-        NOAA 06         '11416'     'noaa'          
-        DOVE-2          '39132'     'planet'        
-        ISS             '25544'     'zarya'      
+        Amateur Radio   '14129'
+        CryoSat-2       '36508'
+        COSMOS Debris   '34393'
+        Delfi C3        '32789'
+        ENVISAT         '27386'
+        GOCE            '34602'
+        GOES-4          '11964'
+        BIIR-2          '24876'
+        GRACE-2         '27392'
+        Iridium 73      '25346'
+        LAGEOS-1        '08820'
+        METEOR 2-06     '11962'
+        NOAA 06         '11416'
+        DOVE-2          '39132'
+        ISS             '25544'
     Or insert a custom one.
 %}
 
-norID = ''; % NORAD ID
-file = '23789'; % file name
+file = input('Please enter a valid NORAD identifier: ','s'); % ask for NORAD ID
 
 %% Settings
 
@@ -37,14 +36,13 @@ file = '23789'; % file name
         true:   no available information/do not know
 %}
 
-options = struct('norID',   norID,...                   % NORAD ID
-                 'file',    ['files/',file,'.txt'],...  % convert file name
+options = struct('file',    ['files/',file,'.txt'],...  % convert file name
                  'thrust',  1,...                       % (see above)
                  'showfig', 1,...                       % show figures
                  'ignore',  0.01,...                    % ignore first XX percent of data
                  'factor',  1.5,...                     % safety factor for thrust detection
                  'limit',   50,...                      % limit for days of separations between maneuvers
-                 'offset',  50);
+                 'offset',  10);
 
 %...Make sure selection is intentional
 if options.thrust == false

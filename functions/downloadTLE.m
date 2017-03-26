@@ -5,7 +5,6 @@
 %   - options:  structure array containing:
 %                   1) file:	file name to be read, to extract TLE 
 %                               information
-%                   2) satID:   satellite NORAD ID
 %  Output:
 %   - N/A
 
@@ -13,7 +12,6 @@ function downloadTLE(options)
 
 %...Extract
 filename = replace(options.file,'files/','');
-satID = options.norID;
 
 %...Check if file already exists
 files = dir('files/*.txt');
@@ -26,10 +24,14 @@ for file = files'
     end
 end
 
+%...Remove extension
+filename = replace(filename,'.txt','');
+
 if present == false
     %...User data
     username = input('Please enter a username for space-track.org: ','s');
     password = input('Please enter the corresponding password: ','s');
+    disp([newline,'Downloading, please wait...',newline])
 
     %...Define dates
     start = '1980-01-01';
@@ -40,7 +42,7 @@ if present == false
 
     link = ['https://www.space-track.org/basicspacedata/',...
             'query/class/tle/',...
-            'EPOCH/',start,'--',stop,'/NORAD_CAT_ID/',satID,'/',...
+            'EPOCH/',start,'--',stop,'/NORAD_CAT_ID/',filename,'/',...
             'orderby/TLE_LINE1 ASC/format/tle'];
 
     post = {'identity',username,...
@@ -48,6 +50,6 @@ if present == false
             'query',link};
 
     %...Write to file
-    urlwrite(URL,['files/',filename],'Post',post,'Timeout',20);
+    urlwrite(URL,['files/',filename,'.txt'],'Post',post,'Timeout',20);
     pause(10) % give time to download
 end
