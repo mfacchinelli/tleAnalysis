@@ -105,14 +105,22 @@ while any(abs(EA-EA_0)>1e-10) && iter < 5e3 % iterative process (with safety bre
 end
 TA = wrapTo2Pi(2.*atan(sqrt((1+e)./(1-e)).*tan(EA./2)));  % [rad] true anomaly
 
-%...Remove duplicates
-where = diff(t)~=0; % remove duplicates in time
-t = t(where); a = a(where); e = e(where); i = i(where); O = O(where); o = o(where); TA = TA(where);
-MA = MA(where); n = n(where); nd = nd(where); ndd = ndd(where); Bstar = Bstar(where);
-
 %...Combine Keplerian elements
 kepler = horzcat(t,a,e,i,O,o,TA,MA);
 propagation = horzcat(n.*60,nd,ndd,Bstar); % convert mean motion to rad/min
+
+%...Remove duplicates
+where = diff(t)==0; % remove duplicates in time
+kepler(where,:) = [];
+
+%...Remove outliers and sort data
+for i = 1:size(kepler,2)
+    kepler = chauvenet(kepler,kepler(:,i));
+end
+
+%...Reorder data
+% [kepler,index] = sort(kepler,1);
+% propagation = propagation(index(:,1),:);
 
 %...Plot results
 if showfig == true
