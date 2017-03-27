@@ -32,14 +32,14 @@ file = input('Please enter a valid NORAD identifier: ','s'); % ask for NORAD ID
 
 %{
     Select thrust setting:
-        false:  for sure satellite has no thrust
-        true:   no available information/do not know
+        false (0):  for sure satellite has no thrust
+        true (1):   no available information/do not know
 %}
 
 options = struct('file',    ['files/',file,'.txt'],...  % convert file name
                  'thrust',  1,...                       % (see above)
                  'showfig', 1,...                       % show figures
-                 'ignore',  0.01,...                    % ignore first XX percent of data
+                 'ignore',  0.05,...                    % ignore first XX percent of data
                  'factor',  1.5,...                     % safety factor for thrust detection
                  'limit',   50,...                      % limit for days of separations between maneuvers
                  'offset',  200);                        % number of steps to take between observations

@@ -37,7 +37,7 @@ thrust = options.thrust;
 
 %...Open file
 fileID = fopen(filename,'r+');
-data = textscan(fileID,'%s\t%f\t%f\t%f\n','CommentStyle','#');
+data = textscan(fileID,'%s\t%f\t%f\t%f\t%f\n','CommentStyle','#');
 
 %...Add information only if no thrust
 if thrust == false
@@ -48,7 +48,7 @@ if thrust == false
     mins = [min(da);min(de);min(di);min(dO)];
 
     %...Check if satellite is already in file
-    if ~any(data{1}==satID)
+    if any(data{1}==satID) == false
         %...Append to file
         saveData = [ids,means,stds,maxs,mins];
         for i = 1:4 
