@@ -110,17 +110,18 @@ kepler = horzcat(t,a,e,i,O,o,TA,MA);
 propagation = horzcat(n.*60,nd,ndd,Bstar); % convert mean motion to rad/min
 
 %...Remove duplicates
-where = diff(t)==0; % remove duplicates in time
+where = diff(t)==0; % find duplicates in time
 kepler(where,:) = [];
 
-%...Remove outliers and sort data
+%...Remove outliers
 for i = 1:size(kepler,2)
     kepler = chauvenet(kepler,kepler(:,i));
 end
 
-%...Reorder data
-% [kepler,index] = sort(kepler,1);
-% propagation = propagation(index(:,1),:);
+%...Sort data
+[kepler(:,1),index] = sort(kepler(:,1),1);
+kepler(:,2:end) = kepler(index,2:end);
+propagation = propagation(index,:);
 
 %...Plot results
 if showfig == true

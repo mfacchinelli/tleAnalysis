@@ -8,11 +8,8 @@
 
 function data = chauvenet(data,reference)
 
-time = zeros(length(data(:,1)),1);
-
-for i = 2:size(data(:,1),1)
-    time(i) = (data(i,1)-data(i-1,1));
-end
+%...Find time step
+time = vertcat(0,diff(data(:,1)));
 
 %...Standard deviation
 stdTime = std(time);
@@ -26,11 +23,8 @@ expRef = mean(reference);
 prob = 1/(2*size(data(:,1),1));
 pTest = 1-prob/2;
 
-%...Z
+%...Z factor
 zc = norminv(pTest,0,1);
-
-% tsince_zscore = (time-expTime)/stdTime;
-% dist_zscore = (reference(:,3)-expRef)/stdRef;
 
 %...Maximum value allowed
 maxTime = expTime+zc*stdTime;
@@ -39,11 +33,12 @@ maxRef = expRef+zc*stdRef;
 %...Array of outlier position
 outlier = false(size(data(:,1)));
 
-%...Loop over data
+%...Loop over data to find where outliers are
 for i = 1:size(data(:,1),1)
     if ((time(i) > maxTime) || (reference(i) > maxRef))
         outlier(i) = true;
     end
 end
 
+%...Remove outliers
 data(outlier,:) = [];

@@ -16,7 +16,7 @@ constants()
         GOCE            '34602'
         GOES-4          '11964'
         BIIR-2          '24876'
-        GRACE-2         '27392'
+        GRACE-2         '27392'     no thrust
         Iridium 73      '25346'
         LAGEOS-1        '08820'     no thrust
         METEOR 2-06     '11962'
@@ -62,7 +62,7 @@ options.ID = data.ID;
 %% Thrust detection
 
 %...Detect periods of thrust usage
-thrustPeriods = thrustTLE(data,options);
+thrustTLE(data.orbit,options);
 
 %% End
 

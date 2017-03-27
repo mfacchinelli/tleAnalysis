@@ -64,14 +64,14 @@ data = textscan(fileID,'%s\t%f\t%f\t%f\t%f\n','CommentStyle','#');
 fclose(fileID);
 
 %...Analyze data
-max_a = max(data{4}(1:5:end));
-min_a = abs(min(data{5}(1:5:end)));
-max_e = max(data{4}(2:5:end));
-min_e = abs(min(data{5}(2:5:end)));
-max_i = max(data{4}(3:5:end));
-min_i = abs(min(data{5}(3:5:end)));
-max_O = max(data{4}(4:5:end));
-min_O = abs(min(data{5}(4:5:end)));
+max_a = max(data{4}(1:4:end));
+min_a = abs(min(data{5}(1:4:end)));
+max_e = max(data{4}(2:4:end));
+min_e = abs(min(data{5}(2:4:end)));
+max_i = max(data{4}(3:4:end));
+min_i = abs(min(data{5}(3:4:end)));
+max_O = max(data{4}(4:4:end));
+min_O = abs(min(data{5}(4:4:end)));
 
 %...Struct of extraced data
 extract = struct('a',[max_a,min_a],'e',[max_e,min_e],'i',[max_i,min_i],'O',[max_O,min_O]);
