@@ -42,7 +42,7 @@ options = struct('file',    ['files/',file,'.txt'],...  % convert file name
                  'ignore',  0.05,...                    % ignore first XX percent of data
                  'factor',  1.5,...                     % safety factor for thrust detection
                  'limit',   50,...                      % limit for days of separations between maneuvers
-                 'offset',  200);                        % number of steps to take between observations
+                 'offset',  5);                         % number of steps to take between observations
 
 %...Make sure selection is intentional
 if options.thrust == false
