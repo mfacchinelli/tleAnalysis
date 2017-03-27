@@ -8,7 +8,6 @@
 %   - options:  structure array containing:
 %               	1) file:    file name to be read, to extract TLE 
 %                               information
-%                   2) offset:  Tnumber of steps to take between observations
 % Output:
 %   - N/A
 
@@ -45,10 +44,7 @@ switch which
         grid on
         set(gca,'FontSize',13)
         
-    case 'residuals'
-        %...Extract options
-        k = options.offset;
-        
+    case 'residuals'        
         %...Extract inputs
         keplerTLE = inputs{1};
         keplerProp = inputs{2};
@@ -60,7 +56,7 @@ switch which
         for i = 1:6
             subplot(3,2,i)
             hold on
-            plot(keplerTLE(2:k:end,1),keplerTLE(2:k:end,i+1))
+            plot(keplerTLE(2:end,1),keplerTLE(2:end,i+1))
             plot(keplerProp(:,1),keplerProp(:,i+1))
             hold off
             xlabel('Time [day]')
@@ -83,4 +79,34 @@ switch which
             grid on;
             set(gca,'FontSize',13);
         end
+        
+    case 'thrust'
+        %...Extract inputs
+        keplerTLE = inputs{1};
+        thrustPeriods = inputs{2};
+        
+        %...Plot thrust periods
+        figure;
+        labels = {'a [m]','e [-]','i [deg]','\Omega [deg]','\omega [deg]','\vartheta [deg]'};
+        for i = 1:size(keplerTLE,2)-2
+            subplot(3,2,i)
+            hold on
+            plot(keplerTLE(:,1),keplerTLE(:,i+1))
+            ax = gca;
+            ylimit = ax.YLim;
+            for j = 1:size(thrustPeriods,1)
+                pos = [thrustPeriods(j,1),ylimit(1),diff(thrustPeriods(j,:)),ylimit(2)];
+                rectangle('Position',pos,'FaceColor',[0.95,0.5,0.5,0.5])
+            end
+            hold off
+            xlabel('Time [day]')
+            ylabel(labels{i})
+            xlim([keplerTLE(1,1),keplerTLE(end,1)])
+            ylim(ylimit)
+            grid on
+            set(gca,'FontSize',13)
+        end
+        
+    otherwise
+        error('Nonexsisting case selected.')
 end

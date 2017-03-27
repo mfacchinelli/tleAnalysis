@@ -13,7 +13,17 @@
 %   - extract:  structure array containing maximum and minimum limitation
 %               values for each Keplerian element, for thrust detection
 
-function extract = statTLE(residuals,options)
+function extract = statTLE(which,residuals,options)
+
+%...Chose
+switch which
+    case 'TLE'
+        filename = 'files/statTLE.txt';
+    case 'Prop'
+        filename = 'files/statProp.txt';
+    otherwise
+        error('Nonexsisting case selected.')
+end
 
 %...Extract data
 da = residuals(:,1);
@@ -26,7 +36,7 @@ satID = options.ID;
 thrust = options.thrust;
 
 %...Open file
-fileID = fopen('files/stat.txt','r+');
+fileID = fopen(filename,'r+');
 data = textscan(fileID,'%s\t%f\t%f\t%f\n','CommentStyle','#');
 
 %...Add information only if no thrust
@@ -49,7 +59,7 @@ end
 fclose(fileID);
 
 %...Collect data
-fileID = fopen('files/stat.txt','r');
+fileID = fopen(filename,'r');
 data = textscan(fileID,'%s\t%f\t%f\t%f\t%f\n','CommentStyle','#');
 fclose(fileID);
 

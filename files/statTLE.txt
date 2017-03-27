@@ -1,0 +1,11 @@
+# TLE statistics.
+# 
+# The data that is stored is related to statistics of perturbations for satellites
+# without thrust and at altitudes where perturbations do not play a major role. 
+# Order: satID, mean, std, max, min (for each interesting Keplerian element, 
+# i.e. 4 times).
+#
+08021G	-1.767880e+01	+2.398400e+01	+6.200490e+01	-2.973241e+02
+08021G	-3.813070e-08	+7.174060e-06	+5.680000e-05	-5.690000e-05
+08021G	-1.713660e-06	+5.576120e-06	+4.537860e-05	-6.283185e-05
+08021G	+1.266140e-02	+6.422510e-03	+8.614770e-02	+9.616764e-04

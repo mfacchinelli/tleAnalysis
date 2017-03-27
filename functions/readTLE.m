@@ -58,7 +58,7 @@ for i = find(leap==1)'
 end
 
 %...Show time interval
-disp(['First observation on day ',num2str(dayInit),', year ',num2str(yearInit),'.'])
+disp([newline,'First observation on day ',num2str(dayInit),', year ',num2str(yearInit),'.'])
 disp(['Last observation on day ',num2str(dayEnd),', year ',num2str(yearEnd),'.'])
 
 %...Decode Keplerian elements
