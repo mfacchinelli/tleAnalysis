@@ -88,10 +88,10 @@ warning('off')
 warning('on')
 
 %...Merge positive and negative values
-locs_a = lower+sort(vertcat(locs_a_1,locs_a_2));
-locs_e = lower+sort(vertcat(locs_e_1,locs_e_2));
-locs_i = lower+sort(vertcat(locs_i_1,locs_i_2));
-locs_O = lower+sort(vertcat(locs_O_1,locs_O_2));
+locs_a = lower+sort(vertcat(locs_a_1,locs_a_2))*k;
+locs_e = lower+sort(vertcat(locs_e_1,locs_e_2))*k;
+locs_i = lower+sort(vertcat(locs_i_1,locs_i_2))*k;
+locs_O = lower+sort(vertcat(locs_O_1,locs_O_2))*k;
 locsProp = {locs_a,locs_e,locs_i,locs_O};
  
 %...Detect thrust peaks
@@ -166,14 +166,14 @@ else
 end
 
 %...Inform user on no thrust
-if thrustFoundProp == 0 && thrustFoundTLE == 0
+if thrustFoundProp == false && thrustFoundTLE == false
     disp([newline,'No thrust was detected.'])
 end
 
 %...Plot periods of thrust overlaid to Keplerian elements
-if showfig == true && ~isempty(thrustDaysProp)
+if showfig == true && thrustFoundProp == true
     plotAll('thrust',{keplerTLE,thrustPeriodsProp})
 end
-if showfig == true && ~isempty(thrustDaysTLE)
+if showfig == true && thrustFoundTLE == true
     plotAll('thrust',{keplerTLE,thrustPeriodsTLE})
 end

@@ -72,7 +72,6 @@ switch which
         labels = {'\Delta a [m]','\Delta e [-]','\Delta i [rad]','\Delta \Omega [rad]'};
         for i = 1:4
             subplot(2,2,i)
-            hold on;
             plot(keplerProp(:,1),residuals(:,i))
             xlabel('Time [day]');
             ylabel(labels{i});
