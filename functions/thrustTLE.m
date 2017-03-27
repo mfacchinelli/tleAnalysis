@@ -15,7 +15,7 @@
 %   - thrustPeriods:    array with lower and upper bounds for thrust
 %                       periods, in days
 
-function thrustPeriodsProp = thrustTLE(extract,options)
+function thrustPeriods = thrustTLE(extract,options)
 
 %...Extract data
 keplerTLE = extract.orbit;
@@ -136,19 +136,19 @@ end
 thrustDaysTLE = unique(thrustDaysTLE);
 
 %...Find thrust periods from propagation
-thrustPeriodsProp = [];
-if ~isempty(thrustDaysProp)
-    thrustFoundProp = 1;
-    separation = diff(thrustDaysProp);
-    where = [0;find(separation>limit);size(separation,1)+1]+1;
-    disp([newline,'Periods where thrust was detected:'])
-    for i = 1:size(where,1)-1
-        thrustPeriodsProp(i,:) = [floor(thrustDaysProp(where(i))),ceil(thrustDaysProp(where(i+1)-1))];
-        disp([num2str(i),char(9),num2str(floor(thrustDaysProp(where(i)))),' - ',num2str(ceil(thrustDaysProp(where(i+1)-1)))])
-    end
-else
-    thrustFoundProp = 0;
-end
+% thrustPeriodsProp = [];
+% if ~isempty(thrustDaysProp)
+%     thrustFoundProp = 1;
+%     separation = diff(thrustDaysProp);
+%     where = [0;find(separation>limit);size(separation,1)+1]+1;
+%     disp([newline,'Periods where thrust was detected:'])
+%     for i = 1:size(where,1)-1
+%         thrustPeriodsProp(i,:) = [floor(thrustDaysProp(where(i))),ceil(thrustDaysProp(where(i+1)-1))];
+%         disp([num2str(i),char(9),num2str(floor(thrustDaysProp(where(i)))),' - ',num2str(ceil(thrustDaysProp(where(i+1)-1)))])
+%     end
+% else
+%     thrustFoundProp = 0;
+% end
 
 %...Find thrust periods from change in orbital elements
 thrustPeriodsTLE = [];
@@ -165,15 +165,30 @@ else
     thrustFoundTLE = 0;
 end
 
-%...Inform user on no thrust
-if thrustFoundProp == false && thrustFoundTLE == false
-    disp([newline,'No thrust was detected.'])
+%...Find continuous thrust and/or satellite decay
+if thrustFoundTLE == false %&& thrustFoundProp == false
+    %...Detection variable
+    continuousThrustDetectionValue = median(daTLE)/median(abs(daTLE));
+    
+    %...Check if within constraints
+    if continuousThrustDetectionValue < -0.95 || abs(continuousThrustDetectionValue) < 0.05
+        continuousThrust = false;
+        disp([newline,'No coninuous thrust detected.'])
+    else 
+        continuousThrust = true;
+        disp([newline,'Continuous thrust detected.'])
+    end
+    
+    %...Inform user on no thrust
+    if continuousThrust == false
+        disp([newline,'No thrust was detected.'])
+    end
 end
 
 %...Plot periods of thrust overlaid to Keplerian elements
-if showfig == true && thrustFoundProp == true
-    plotAll('thrust',{keplerTLE,thrustPeriodsProp})
-end
+% if showfig == true && thrustFoundProp == true
+%     plotAll('thrust',{keplerTLE,thrustPeriodsProp})
+% end
 if showfig == true && thrustFoundTLE == true
     plotAll('thrust',{keplerTLE,thrustPeriodsTLE})
 end
