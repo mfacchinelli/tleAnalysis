@@ -1,6 +1,6 @@
 %  MATLAB Function < constants >
 % 
-%  Purpose:     define constants globally
+%  Purpose:	define constants globally
 %  Input:
 %   - N/A
 %  Output:

@@ -34,7 +34,7 @@ dO(dO<-pi) = dO(dO<-pi)+2*pi;
 
 %...Get statistics
 data = statTLE('TLE',[da,de,di,dO],options);
- 
+
 %...Detect thrust peaks
 warning('off')
 [~,locs_a_1] = findpeaks(da,'MinPeakHeight',factor*data.a(1)); % positive change

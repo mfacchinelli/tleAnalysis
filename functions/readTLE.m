@@ -115,7 +115,7 @@ kepler(where,:) = [];
 
 %...Remove outliers
 for i = 1:size(kepler,2)
-    kepler = chauvenet(kepler,kepler(:,i));
+%     kepler = chauvenet(kepler,kepler(:,i));
 end
 
 %...Sort data
