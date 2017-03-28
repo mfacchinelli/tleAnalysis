@@ -25,6 +25,7 @@ downloadTLE(options)
 
 %...Extract options
 file = options.file;
+thrust = options.thrust;
 showfig = options.showfig;
 
 %...Correct file if first time
@@ -113,9 +114,11 @@ propagation = horzcat(n.*60,nd,ndd,Bstar); % convert mean motion to rad/min
 where = diff(t)==0; % find duplicates in time
 kepler(where,:) = [];
 
-%...Remove outliers
-for i = 1:size(kepler,2)
-%     kepler = chauvenet(kepler,kepler(:,i));
+%...Remove outliers for satellites with no thrust
+if thrust == false
+    for i = 1:size(kepler,2)
+        kepler = chauvenet(kepler,kepler(:,i));
+    end
 end
 
 %...Sort data

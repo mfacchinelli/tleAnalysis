@@ -5,12 +5,8 @@
 %   - kepler:   Keplerian elements of satellite to be analyzed 
 %   - options:  structure array containing:
 %                   1) showfig:     command whether to show plots
-%                   2) ignore:      percent of data to ignore at beginning
-%                                   of observations
-%                   3) factor:      safety factor for thrust detection
-%                   4) limit:       minimum separation in days between two
+%                   2) limit:       minimum separation in days between two
 %                                   distinct thrusting maneuvers
-%                   5) offset:      number of steps to take between observations
 % Output:
 %   - thrustPeriods:    array with lower and upper bounds for thrust
 %                       periods, in days
@@ -22,7 +18,7 @@ showfig = options.showfig;
 limit = options.limit;
 
 %...Get location of peaks
-[locs,CTP] = peaksTLE(kepler,options); % CTP: continuous thrust parameter
+[locs,CTP,maxCTP] = peaksTLE(kepler,options); % CTP: continuous thrust parameter
 
 %...Check for repetitions with tolerances of +/- 5 days
 thrustDays = [];
@@ -30,8 +26,10 @@ for i = 1:3
     for j = 1+i:4
         if i ~= j
             tol = 5/max(abs([kepler(locs{i},1);kepler(locs{j},1)]));
-            locA = ismembertol(kepler(locs{i},1),kepler(locs{j},1),tol);
-            thrustDays = vertcat(thrustDays,kepler(locs{i}(locA)));
+            if ~isempty(tol)
+                locA = ismembertol(kepler(locs{i},1),kepler(locs{j},1),tol);
+                thrustDays = vertcat(thrustDays,kepler(locs{i}(locA)));
+            end
         end
     end
 end
@@ -55,7 +53,7 @@ end
 %...Find continuous thrust and/or satellite decay
 if impulsiveThrust == false    
     %...Check if CTP is within constraints
-    if CTP < -0.95 || abs(CTP) < 0.05
+    if CTP <= maxCTP || abs(CTP) < 0.05
         continuousThrust = false;
     else 
         continuousThrust = true;
