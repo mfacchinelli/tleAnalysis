@@ -13,7 +13,7 @@ function options = settings()
 %    	true  (1):  no available information/do not know
 
 options = struct('file',    ['files/',input('Please enter a valid NORAD identifier: ','s'),'.txt'],... % ask for NORAD ID
-                 'thrust',  0,... % (see above)
+                 'thrust',  1,... % (see above)
                  'showfig', 1,... % show figures
                  'ignore',  0.05,... % ignore first XX percent of data
                  'factor',  1.05,... % safety factor for thrust detection

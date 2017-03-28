@@ -41,10 +41,10 @@ if ~isempty(thrustDays)
     impulsiveThrust = true;
     separation = diff(thrustDays);
     where = [0;find(separation>limit);size(separation,1)+1]+1;
-    disp([newline,'Periods where thrust was detected:'])
+    disp([newline,'Impulsive thrust detected.']) %'Periods where thrust might have been used:'
     for i = 1:size(where,1)-1
         thrustPeriods(i,:) = [floor(thrustDays(where(i))),ceil(thrustDays(where(i+1)-1))];
-        disp([num2str(i),char(9),num2str(thrustPeriods(i,1)),' - ',num2str(thrustPeriods(i,2))])
+%         disp([num2str(i),char(9),num2str(thrustPeriods(i,1)),' - ',num2str(thrustPeriods(i,2))])
     end
 else
     impulsiveThrust = false;

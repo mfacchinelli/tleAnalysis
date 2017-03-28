@@ -18,7 +18,7 @@ constants()
         BIIR-2          '24876'
         GRACE-2         '27392'     no thrust
         Iridium 73      '25346'
-        LAGEOS-1        '08820'     no thrust
+        LAGEOS-1        '08820'
         METEOR 2-06     '11962'
         NOAA 06         '11416'
         DOVE-2          '39132'     no thrust
