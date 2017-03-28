@@ -4,9 +4,10 @@
 %               file; use correctTLE function to correct element overlap
 %  Input:
 %   - options:  structure array containing:
-%                   1) file:        file name to be read, to extract TLE 
-%                                   information
-%                   2) showfig:     command whether to show plots
+%                   1) file:    file name to be read, to extract TLE information
+%                   2) thrust:  presence of propulsion subsystem on satellite
+%                   3) showfig:	command whether to show plots
+%                   4) outlier: command whether to apply Chauvenet's criterion
 %  Output:
 %   - extract:  structure array containing: 
 %                   1) ID:          satellite identifier
@@ -27,6 +28,7 @@ downloadTLE(options)
 file = options.file;
 thrust = options.thrust;
 showfig = options.showfig;
+outlier = options.outlier;
 
 %...Correct file if first time
 correctTLE(file)
@@ -115,7 +117,7 @@ where = diff(t)==0; % find duplicates in time
 kepler(where,:) = [];
 
 %...Remove outliers for satellites with no thrust
-if thrust == false
+if outlier == true
     for i = 1:size(kepler,2)
         kepler = chauvenet(kepler,kepler(:,i));
     end
