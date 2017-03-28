@@ -12,7 +12,9 @@ function options = settings()
 %   	false (0):  for sure satellite has no thrust
 %    	true  (1):  no available information/do not know
 
-options = struct('file',    ['files/',input('Please enter a valid NORAD identifier: ','s'),'.txt'],... % ask for NORAD ID
+filename = input('Please enter a valid NORAD identifier: ','s'); % ask for NORAD ID
+
+options = struct('file',    ['files/',filename,'.txt'],... % adapt name
                  'thrust',  1,... % (see above)
                  'showfig', 1,... % show figures
                  'ignore',  0.05,... % ignore first XX percent of data
@@ -24,4 +26,21 @@ options = struct('file',    ['files/',input('Please enter a valid NORAD identifi
 if options.thrust == false
     warning('You selected no thrust!')
     input([newline,'Press enter to confirm that this spacecraft has no thrust.'])
+end
+
+%...Load data on satellites
+load('files/satData.mat');
+
+%...Check if satellite is in file
+try 
+    satellites(filename);
+catch
+    %...Ask for data
+    mass = input('Insert satellite mass (kg): ');
+    units = input('Insert satellite number of units (U): ');
+    panels = input('Insert solar panel logical (T/F): ');
+    satellites(filename) = [mass,units,panels];
+    
+    %...Save with new data
+    save('files/satData.mat','satellites');
 end
