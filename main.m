@@ -26,32 +26,8 @@ constants()
     Or insert a custom one.
 %}
 
-file = input('Please enter a valid NORAD identifier: ','s'); % ask for NORAD ID
-
-%% Settings
-
-%{
-    Select thrust setting:
-        false (0):  for sure satellite has no thrust
-        true (1):   no available information/do not know
-%}
-
-options = struct('file',    ['files/',file,'.txt'],...  % convert file name
-                 'thrust',  1,...                       % (see above)
-                 'showfig', 1,...                       % show figures
-                 'ignore',  0.05,...                    % ignore first XX percent of data
-                 'factor',  1.5,...                     % safety factor for thrust detection
-                 'limit',   50,...                      % limit for days of separations between maneuvers
-                 'offset',  5);                         % number of steps to take between observations
-
-%...Make sure selection is intentional
-if options.thrust == false
-    warning('You selected no thrust!')
-    input([newline,'Press enter to confirm that this spacecraft has no thrust.'])
-end
-
-%...Clean up
-clear norID file
+%...Load settings
+options = settings();
 
 %% Decode TLE
 
@@ -63,6 +39,7 @@ options.ID = data.ID;
 
 %...Detect periods of thrust usage
 thrustTLE(data.orbit,options);
+% thrustTLEprop(data,options);
 
 %% End
 
