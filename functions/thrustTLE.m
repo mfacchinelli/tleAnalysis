@@ -21,15 +21,17 @@ function thrustTLE(kepler,options)
 showfig = options.showfig;
 limit = options.limit;
 
-%...Get locations of peaks
+%...Get location of peaks
 [locs,CTP] = peaksTLE(kepler,options); % CTP: continuous thrust parameter
 
-%...Check for repetitions
+%...Check for repetitions with tolerances of +/- 5 days
 thrustDays = [];
 for i = 1:3
     for j = 1+i:4
         if i ~= j
-            thrustDays = vertcat(thrustDays,intersect(kepler(locs{i},1),kepler(locs{j},1)));
+            tol = 5/max(abs([kepler(locs{i},1);kepler(locs{j},1)]));
+            locA = ismembertol(kepler(locs{i},1),kepler(locs{j},1),tol);
+            thrustDays = vertcat(thrustDays,kepler(locs{i}(locA)));
         end
     end
 end
@@ -44,7 +46,7 @@ if ~isempty(thrustDays)
     disp([newline,'Periods where thrust was detected:'])
     for i = 1:size(where,1)-1
         thrustPeriods(i,:) = [floor(thrustDays(where(i))),ceil(thrustDays(where(i+1)-1))];
-        disp([num2str(i),char(9),num2str(floor(thrustDays(where(i)))),' - ',num2str(ceil(thrustDays(where(i+1)-1)))])
+        disp([num2str(i),char(9),num2str(thrustPeriods(i,1)),' - ',num2str(thrustPeriods(i,2))])
     end
 else
     impulsiveThrust = false;
