@@ -4,7 +4,7 @@ addpath functions/ propagation/
 %...Global constants
 constants()
 
-%% Input file 
+%% Input file
 
 %{  
     Choose NORAD ID from:

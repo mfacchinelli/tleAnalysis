@@ -5,9 +5,8 @@
 %  Input:
 %   - options:  structure array containing:
 %                   1) file:    file name to be read, to extract TLE information
-%                   2) thrust:  presence of propulsion subsystem on satellite
-%                   3) showfig:	command whether to show plots
-%                   4) outlier: command whether to apply Chauvenet's criterion
+%                   2) showfig:	command whether to show plots
+%                   3) outlier: command whether to apply Chauvenet's criterion
 %  Output:
 %   - extract:  structure array containing: 
 %                   1) ID:          satellite identifier
@@ -26,7 +25,6 @@ downloadTLE(options)
 
 %...Extract options
 file = options.file;
-thrust = options.thrust;
 showfig = options.showfig;
 outlier = options.outlier;
 

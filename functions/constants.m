@@ -25,5 +25,5 @@ Th = Tm/60;         % [hr]      Earth sidereal day (hour)
 g0 = 9.80665;       % [m/s^2]   Surface gravitational constant
 R = 287;            % [J/kg/K]  Air gas constant
 T = 240;            % [K]       Tempterture for exponential model
-H = R*T/g0;         % []        Scale height
+H = R*T/g0;         % [m]       Scale height
 rho0 = 1.225;       % [kg/m^3]  Surface density
