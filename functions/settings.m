@@ -50,7 +50,7 @@ if options.thrust == false
 end
 
 %...Load data on satellites
-load('files/satData.mat');
+load(‘statistics/satData.mat');
 
 %...Check if satellite is in file
 try 
@@ -63,5 +63,5 @@ catch
     satellites(answer{1}) = [mass,units,panels];
     
     %...Save with new data
-    save('files/satData.mat','satellites');
+    save('statistics/satData.mat','satellites');
 end

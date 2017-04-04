@@ -114,17 +114,21 @@ propagation = horzcat(n.*60,nd,ndd,Bstar); % convert mean motion to rad/min
 where = diff(t)==0; % find duplicates in time
 kepler(where,:) = [];
 
-%...Remove outliers for satellites with no thrust
-if outlier == true
-    for i = 1:size(kepler,2)
-        kepler = chauvenet(kepler,kepler(:,i));
-    end
-end
-
 %...Sort data
 [kepler(:,1),index] = sort(kepler(:,1),1);
 kepler(:,2:end) = kepler(index,2:end);
 propagation = propagation(index,:);
+
+%...Remove outliers
+if outlier == true
+    %...Keplerian elements
+    for i = 1:size(kepler,2)-1
+        dKE = diff(kepler(:,i));
+        kepler_firstRow = kepler(1,:);
+        kepler = chauvenet(kepler,kepler(:,i));
+        kepler = vertcat(kepler_firstRow,kepler);
+    end
+end
 
 %...Plot results
 if showfig == true

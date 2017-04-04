@@ -35,7 +35,7 @@ outlier = false(size(data(:,1)));
 
 %...Loop over data to find where outliers are
 for i = 1:size(data(:,1),1)
-    if ((time(i) > maxTime) || (reference(i) > maxRef))
+    if ((time(i) > maxTime) || (abs(reference(i)) > maxRef))
         outlier(i) = true;
     end
 end

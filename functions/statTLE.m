@@ -17,7 +17,7 @@
 function extract = statTLE(residuals,options)
 
 %...Set textfile name
-filename = 'files/stat.txt';
+filename = ‘statistics/stat.txt';
 
 %...Extract data
 da = residuals{1};
