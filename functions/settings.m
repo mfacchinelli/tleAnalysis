@@ -40,8 +40,7 @@ options = struct('file',    ['files/',answer{1},'.txt'],... % adapt name
 
 %...Make sure selection is intentional
 if options.thrust == false
-    warning('You selected no thrust!')
-    input([newline,'Press enter to confirm that this spacecraft has no thrust.'])
+    waitfor(warndlg({'You selected no thrust!';'Press OK to confirm this selection.'},'Thrust Warning'))
 end
 
 %...Force outlier detection if satellite has no thrust

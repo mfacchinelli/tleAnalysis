@@ -127,7 +127,7 @@ kepler(:,2:end) = kepler(index,2:end);
 propagation = propagation(index,:);
 
 %...Remove duplicates
-where = diff(t)<=1e-5; % find duplicates in time
+where = diff(t)<=1e-8; % find duplicates in time
 kepler(where,:) = [];
 propagation(where,:) = [];
 
