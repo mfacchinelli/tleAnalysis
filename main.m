@@ -38,8 +38,7 @@ options.ID = data.ID;
 %% Thrust detection
 
 %...Detect periods of thrust usage
-% thrustTLE(data.orbit,options);
-thrustTLEprop(data,options);
+thrustTLE(data.orbit,options);
 
 %% End
 
