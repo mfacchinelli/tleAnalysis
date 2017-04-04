@@ -50,7 +50,7 @@ if options.thrust == false
 end
 
 %...Load data on satellites
-load(‘statistics/satData.mat');
+load('statistics/satData.mat');
 
 %...Check if satellite is in file
 try 
