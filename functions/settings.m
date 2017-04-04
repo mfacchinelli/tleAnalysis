@@ -8,10 +8,14 @@
 
 function options = settings()
 
+%...Display message
+disp('Welcome! Please fill in the data in the pop-up window.')
+
 %	Select thrust setting:
 %   	false (0):  for sure satellite has no thrust
 %    	true  (1):  no available information/do not know
 
+%...Ask for inputs
 answer = inputdlg({'NORAD identifier:',...
                    'Usage of thrust (T/F):',...
                    'Show figures (T/F):',...
@@ -24,6 +28,7 @@ answer = inputdlg({'NORAD identifier:',...
                    1,...
                    {'32789','true','true','5','1.05','50','1','true'},'on');
 
+%...Save inputs in options structure array
 options = struct('file',    ['files/',answer{1},'.txt'],... % adapt name
                  'thrust',  strcmpi(answer{2},'true'),...   % (see above)
                  'showfig', strcmpi(answer{3},'true'),...   % show figures
@@ -52,7 +57,7 @@ try
     satellites(answer{1});
 catch
     %...Ask for data
-    mass = input('Insert satellite mass (kg): ');
+    mass = input([newline,'Insert satellite mass (kg): ']);
     units = input('Insert satellite number of units (U): ');
     panels = input('Insert solar panel logical (T/F): ');
     satellites(answer{1}) = [mass,units,panels];

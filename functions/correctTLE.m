@@ -19,7 +19,7 @@ if ~strcmp(data(1),'#')
     data = split(string(data));
     if data(end,1) == '', data = data(1:end-1,1); end
     if mod(size(data,1),9) ~= 0 || size(char(data(end)),2) > 6
-        warning('Fixing bugs in text file. This may take several seconds.');
+        warning([newline,'Fixing bugs in text file. This may take several seconds.']);
         i = 1; % index to run through lines
         change = 0; % number of changes done
         limit = size(char(data(18:18:end,:)),1); % limiting number for check

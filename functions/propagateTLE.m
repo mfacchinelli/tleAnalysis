@@ -39,7 +39,7 @@ n = extract.propagator(lower:end,1);        % [rad/min] mean motion
 Bstar = extract.propagator(lower:end,4);	% [1/Re]    drag term
 
 %...Propagate
-for j = (k+1):k:size(t,1)
+for j = (k+1):k:size(t,1)-1
     cartesian((j-1)/k,:) = horzcat(t(j)/Tm,SGP4(t(j)-t(j-k),a(j),MA(j),O(j),o(j),e(j),i(j),n(j),Bstar(j)));
 end
 
@@ -47,7 +47,4 @@ end
 kepler = cart2kepl(cartesian);
 
 %...Add first observation
-% kepler = vertcat([t(1)/Tm,a(1)*Re,e(1),i(1),O(1),o(1),extract.orbit(lower,7),MA(1)],kepler);
-
-
-
+kepler = vertcat([t(1)/Tm,a(1)*Re,e(1),i(1),O(1),o(1),extract.orbit(lower,7),MA(1)],kepler);
