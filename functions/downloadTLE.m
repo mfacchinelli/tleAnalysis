@@ -14,6 +14,7 @@ function downloadTLE(options)
 filename = replace(options.file,'files/','');
 
 %...Check if file already exists
+present = false;
 files = dir('files/*.txt');
 for file = files'
     if strcmp(filename,file.name)
@@ -35,7 +36,7 @@ if present == false
 
     %...Define dates
     start = '1980-01-01';
-    stop = '2018-01-01';
+    stop = '2012-12-01';
 
     %...URL and links
     URL = 'https://www.space-track.org/ajaxauth/login';
@@ -51,5 +52,5 @@ if present == false
 
     %...Write to file
     urlwrite(URL,['files/',filename,'.txt'],'Post',post,'Timeout',20);
-    pause(10) % give time to download
+    pause(30) % give time to download
 end
