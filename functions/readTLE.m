@@ -39,16 +39,24 @@ fclose(fileID);
 %...Decode satellite identifier
 satID = string(read{3}{1});
 
-%...Decode time
+%...Decode year
 time = char(read{4});
 year = str2double(string(time(:,1:2,:)));
 year(year>50) = 1900+year(year>50); % convert years to four digits
 year(year<50) = 2000+year(year<50); % ... (will only work until 2049)
+
+%...Sort data
+[year,index] = sort(year,1);
+
+%...Correct for leap years
 leap = year.*(mod(year-1,4)==0); % find leap years
 leap = diff(leap-1)>1; % find discontinuity in leap years
 yearInit = year(1); yearEnd = year(end);
 year = year - yearInit; % convert year to years since first measurement
+
+%...Decode day
 day = str2double(string(time(:,3:end,:)));
+day = day(index); % sort
 dayInit = day(1); dayEnd = day(end);
 day = day - dayInit; % convert day to days since first measurement
 
@@ -110,14 +118,13 @@ TA = wrapTo2Pi(2.*atan(sqrt((1+e)./(1-e)).*tan(EA./2)));  % [rad] true anomaly
 kepler = horzcat(t,a,e,i,O,o,TA,MA);
 propagation = horzcat(n.*60,nd,ndd,Bstar); % convert mean motion to rad/min
 
+%...Sort data
+kepler(:,2:end) = kepler(index,2:end);
+propagation = propagation(index,:);
+
 %...Remove duplicates
 where = diff(t)==0; % find duplicates in time
 kepler(where,:) = [];
-
-%...Sort data
-[kepler(:,1),index] = sort(kepler(:,1),1);
-kepler(:,2:end) = kepler(index,2:end);
-propagation = propagation(index,:);
 
 %...Remove outliers
 if outlier == true
