@@ -27,9 +27,13 @@ answer = inputdlg({'NORAD identifier:',...
                   'TLE Analysis',...
                   1,...
                   {'32789','true','true','5','1.05','50','1','true'},'on');
+      
+%...Adapt name and account for possible multiple inputs
+name = string(split(answer{1},','));
+filename = join([repmat('files/',size(name)),name,repmat('.txt',size(name))],'');
 
 %...Save inputs in options structure array
-options = struct('file',    ['files/',answer{1},'.txt'],... % adapt name
+options = struct('file',    filename,... 
                  'thrust',  strcmpi(answer{2},'true'),...   % (see above)
                  'showfig', strcmpi(answer{3},'true'),...   % show figures
                  'ignore',  str2double(answer{4})/100,...	% ignore first XX percent of data
@@ -52,15 +56,20 @@ end
 load('statistics/satData.mat');
 
 %...Check if satellite is in file
-try 
-    satellites(answer{1});
-catch
-    %...Ask for data
-    mass = input([newline,'Insert satellite mass (kg): ']);
-    units = input('Insert satellite number of units (U): ');
-    panels = input('Insert solar panel logical (T/F): ');
-    satellites(answer{1}) = [mass,units,panels];
-    
-    %...Save with new data
-    save('statistics/satData.mat','satellites');
+for filename = name'
+    try 
+        satellites(char(filename));
+    catch
+        %...Ask for data
+        answer = inputdlg({'Satellite mass (kg)',...
+                           'Number of units (-):',...
+                           'Deployable solar panels (T/F):'},...
+                          join([filename,'Data']),...
+                          1,...
+                          {'NaN','NaN','NaN'},'on');
+        satellites(char(filename)) = [str2double(answer{1}),str2double(answer{2}),str2double(answer{3})];
+
+        %...Save with new data
+        save('statistics/satData.mat','satellites');
+    end
 end
