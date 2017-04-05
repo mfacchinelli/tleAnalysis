@@ -133,14 +133,22 @@ propagation(where,:) = [];
 
 %...Remove outliers
 if outlier == true
-    %...Keplerian elements
-    for i = 1:size(kepler,2)-1
-        dKE = diff(kepler(:,i));
-        kepler_firstRow = kepler(1,:);
-        kepler = chauvenet(kepler,kepler(:,i));
-        kepler = vertcat(kepler_firstRow,kepler);
+    %...Combine in one array
+    combined = horzcat(kepler,propagation);
+    
+    %...Keplerian elements (exclude angles)
+    for i = 2:size(kepler,2)-3
+        dKE = diff(combined(:,i));
+        combined_firstRow = combined(1,:);
+        combined = chauvenet(combined(2:end,:),dKE);
+        combined = vertcat(combined_firstRow,combined);
     end
+    
+    %...Uncombine arrays
+    kepler = combined(:,1:8);
+    propagation = combined(:,9:end);
 end
+
 
 %...Plot results
 if showfig == true
