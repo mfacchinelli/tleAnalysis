@@ -10,6 +10,7 @@
 %   - locs:                         location of peaks in Keplerian elements
 %   - continuousThrustParameter:    parameter for continuous thrust
 %                                   detection
+%   - maxCTP:                       maximum CTP for no thrust (with factor)
 
 function [locs,continuousThrustParameter,maxCTP] = peaksTLE(kepler,options)
 

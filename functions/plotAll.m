@@ -17,6 +17,7 @@ switch which
     case 'elements'
         %...Extract options
         file = replace(options.file,'files/','');
+        file = replace(file,'.txt','');
         
         %...Extract inputs
         kepler = inputs{1};
@@ -34,7 +35,7 @@ switch which
             set(gca,'FontSize',13)
         end
         subplotTitle('Keplerian Elements')
-        saveas(gca,['figures/',file(1:end-4)],'epsc')
+        saveas(gca,char(join(['figures/',file],'')),'epsc')
 
         %...Plot histogram of observation frequency
         figure;
