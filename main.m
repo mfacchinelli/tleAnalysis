@@ -32,14 +32,17 @@ options = settings();
 %% Decode TLE
 
 %...Extract TLE data
-data = readTLE(options);
-IDs = {data.ID};
-[options.ID] = IDs{:};
+[data,options] = readTLE(options);
 
 %% Thrust detection
 
 %...Detect periods of thrust usage
 thrustTLE(data,options);
+
+%% Find residuals
+
+%...Compute residuals between Keplerian elements and propagation
+residualsTLE(data,options);
 
 %% End
 

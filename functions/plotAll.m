@@ -59,6 +59,10 @@ switch selection
         keplerTLE = inputs{1};
         keplerProp = inputs{2};
         residuals = inputs{3};
+        
+        %...File name
+        file = options.file;
+        file = regexprep(file,'[files/.txt]','');
 
         %...Plot TLE vs. propagation
         figure;
@@ -76,6 +80,7 @@ switch selection
             grid on
             set(gca,'FontSize',13)
         end
+        subplotTitle(file)
 
         %...Plot residuals
         figure;
@@ -88,13 +93,14 @@ switch selection
             grid on;
             set(gca,'FontSize',13);
         end
+        subplotTitle(file)
         
     case 'thrust'
         %...Extract inputs
         keplerTLE = inputs{1};
         thrustPeriods = inputs{2};
         
-        %...File names
+        %...File name
         file = options.file;
         file = regexprep(file,'[files/.txt]','');
         

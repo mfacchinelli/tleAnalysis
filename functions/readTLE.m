@@ -15,7 +15,7 @@
 %                   3) propagator:  data for propagation for each
 %                                   observation time (nd,ndd,Bstar)
 
-function extract = readTLE(options)
+function [extract,options] = readTLE(options)
 
 %...Global constants
 global mu Re J2 Ts Tm
@@ -174,3 +174,7 @@ end
 
 %...Struct of extraced data
 extract = struct('ID',satIDAll,'orbit',keplerAll,'propagator',propagationAll);
+
+%...Add filed in options
+IDs = satIDAll;
+[options.ID] = IDs{:};
