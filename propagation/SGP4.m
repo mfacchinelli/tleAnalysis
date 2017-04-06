@@ -1,3 +1,22 @@
+%  MATLAB Function < SGP4 >
+%
+%  Purpose:     propagate TLE data with SGP4 algorithm, based on Spacetrack 
+%               Report No. 3; originally created by Paul Schattenberg and 
+%               adapted by the tleAnalysis team
+%  Input:
+%   - TSINCE:   time difference between initial time and final time (time
+%               of propagation)
+%   - AODP:     semi-major axis at initial time
+%   - XMO:      mean anomaly at initial time
+%   - XNODEO:   right ascension of ascending node at initial time
+%   - OMEGAO:   argument of perigee at initial time
+%   - EO:       eccentricity at initial time
+%   - XINCL:    inclination at initial time
+%   - XNODP:    mean motion at initial time
+%   - BSTAR:    Bstar parameter at initial time
+%  Output:
+%   - cart:     Cartesian coordinates after propagation
+
 function [cart] = SGP4(TSINCE,AODP,XMO,XNODEO,OMEGAO,EO,XINCL,XNODP,BSTAR)
 
 %...Global constants
