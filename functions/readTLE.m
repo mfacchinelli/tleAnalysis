@@ -27,7 +27,7 @@ propagationAll = cell(size(options));
 
 %...Loop over files
 for filenum = 1:size(options,2)
-    %...File name
+    %...Select options
     option = options(:,filenum);
     
     %...Extract option
