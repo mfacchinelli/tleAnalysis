@@ -30,13 +30,39 @@ filename = replace(filename,'.txt','');
 
 if present == false
     %...User data
-    username = input('Please enter a username for space-track.org: ','s');
-    password = input('Please enter the corresponding password: ','s');
-    disp([newline,'Downloading, please wait...',newline])
+    userdata = 'statistics/credentials.txt';
+    fileID = fopen(userdata,'r+');
+    data = textscan(fileID,'%s\n','CommentStyle','#');
+        
+    if isempty(data{1})
+        %...Ask for credentials
+        answer = inputdlg({'Username:',...
+                           'Password:'},...
+                          'space-track.org',...
+                          1,...
+                          {'',''},'on');
+                      
+        %...Extract credentials
+        username = answer{1};
+        password = answer{2};
+        
+        %...Store credentials
+        for i = 1:2
+            fprintf(fileID,'%s\n',answer{i});
+        end
+    else
+        %...Extract credentials
+        username = data{1}(1);
+        password = data{1}(2);
+    end
+    fclose(fileID);
+
+    %...Inform user on progress
+     disp([newline,'Downloading, please wait...',newline])
 
     %...Define dates
     start = '1980-01-01';
-    stop = '2012-12-01';
+    stop = '2012-12-01'; % reduce to avoid corrupted data points
 
     %...URL and links
     URL = 'https://www.space-track.org/ajaxauth/login';

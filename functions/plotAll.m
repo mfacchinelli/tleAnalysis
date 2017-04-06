@@ -35,7 +35,7 @@ switch which
             set(gca,'FontSize',13)
         end
         subplotTitle('Keplerian Elements')
-        saveas(gca,char(join(['figures/',file],'')),'epsc')
+        saveas(gca,['figures/',file],'epsc')
 
         %...Plot histogram of observation frequency
         figure;
