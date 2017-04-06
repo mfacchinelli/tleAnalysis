@@ -1,17 +1,16 @@
 %  MATLAB Function < downloadTLE >
 % 
-%  Purpose:     download TLE from space-track.org
+%  Purpose:     download TLE from space-track.org; originally created by
+%               Paul Schattenberg and adapted by the tleAnalysis team
 %  Input:
-%   - options:  structure array containing:
-%                   1) file:	file name to be read, to extract TLE 
-%                               information
+%   - file:     file name to be corrected, containing TLE information
 %  Output:
 %   - N/A
 
-function downloadTLE(options)
+function downloadTLE(file)
 
 %...Extract
-filename = replace(options.file,'files/','');
+filename = replace(file,'files/','');
 
 %...Check if file already exists
 present = false;

@@ -11,39 +11,48 @@
 % Output:
 %   - N/A
 
-function plotAll(which,inputs,options)
+function plotAll(selection,inputs,options)
 
-switch which
+switch selection
     case 'elements'
-        %...Extract options
-        file = replace(options.file,'files/','');
-        file = replace(file,'.txt','');
-        
         %...Extract inputs
         kepler = inputs{1};
         
+        %...File names
+        for i = 1:size(options,2)
+            file = options(i).file;
+            file = regexprep(file,'[files/.txt]','');
+            files{i} = file;
+        end
+
         %...Plot Keplerian elements
         figure;
         labels = {'a [m]','e [-]','i [rad]','\Omega [rad]','\omega [rad]','\vartheta [rad]'};
-        for i = 1:size(kepler,2)-2
+        for i = 1:6
             subplot(3,2,i)
-            plot(kepler(:,1),kepler(:,i+1))
+            hold on
+            for j = 1:size(kepler,2)
+                plot(kepler{j}(:,1),kepler{j}(:,i+1))
+            end
+            hold off
             xlabel('Time [day]')
             ylabel(labels{i})
-            xlim([kepler(1,1),kepler(end,1)])
+            legend(files)
             grid on
             set(gca,'FontSize',13)
         end
         subplotTitle('Keplerian Elements')
-        saveas(gca,['figures/',file],'epsc')
 
         %...Plot histogram of observation frequency
-        figure;
-        histogram(diff(kepler(:,1)))
-        xlabel('\Delta t [day]')
-        ylabel('Occurrences [-]')
-        grid on
-        set(gca,'FontSize',13)
+        for i = 1:size(kepler,2)
+            figure;
+            histogram(diff(kepler{i}(:,1)))
+            xlabel('\Delta t [day]')
+            ylabel('Occurrences [-]')
+            grid on
+            set(gca,'FontSize',13)
+            title(files{i})
+        end
         
     case 'residuals'        
         %...Extract inputs
