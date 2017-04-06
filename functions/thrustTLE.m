@@ -87,7 +87,7 @@ for filenum = 1:size(options,2)
 
         %...Plot periods of thrust overlaid to Keplerian elements
         if showfig == true && impulsiveThrust == true
-            plotAll('thrust',{kepler,thrustPeriods})
+            plotAll('thrust',{kepler,thrustPeriods},option)
         end
     else
         disp('Satellite decayed.')

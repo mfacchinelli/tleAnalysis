@@ -94,6 +94,10 @@ switch selection
         keplerTLE = inputs{1};
         thrustPeriods = inputs{2};
         
+        %...File names
+        file = options.file;
+        file = regexprep(file,'[files/.txt]','');
+        
         %...Plot thrust periods
         figure;
         labels = {'a [m]','e [-]','i [deg]','\Omega [deg]','\omega [deg]','\vartheta [deg]'};
@@ -115,6 +119,7 @@ switch selection
             grid on
             set(gca,'FontSize',13)
         end
+        subplotTitle(file)
         
     otherwise
         error('Nonexsisting case selected.')

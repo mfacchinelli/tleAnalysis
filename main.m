@@ -33,12 +33,13 @@ options = settings();
 
 %...Extract TLE data
 data = readTLE(options);
-options.ID = data.ID;
+IDs = {data.ID};
+[options.ID] = IDs{:};
 
 %% Thrust detection
 
 %...Detect periods of thrust usage
-thrustTLE(data.orbit,options);
+thrustTLE(data,options);
 
 %% End
 
