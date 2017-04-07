@@ -51,20 +51,20 @@ if present == false
         end
     else
         %...Extract credentials
-        username = data{1}(1);
-        password = data{1}(2);
+        username = data{1}{1};
+        password = data{1}{2};
     end
     fclose(fileID);
 
     %...Inform user on progress
-     disp([newline,'Downloading, please wait...',newline])
+    disp([newline,'Downloading, please wait...',newline])
 
     %...Define dates
     start = '1980-01-01';
     stop = '2012-12-01'; % reduce to avoid corrupted data points
 
     %...URL and links
-    URL = 'https://www.space-track.org/ajaxauth/login';
+    url = 'https://www.space-track.org/ajaxauth/login';
 
     link = ['https://www.space-track.org/basicspacedata/',...
             'query/class/tle/',...
@@ -76,6 +76,6 @@ if present == false
             'query',link};
 
     %...Write to file
-    urlwrite(URL,['files/',filename,'.txt'],'Post',post,'Timeout',20);
-    pause(5) % give time to download
+    urlwrite(url,['files/',filename,'.txt'],'Post',post,'Timeout',10);
+    pause(5) % avoid time out
 end
