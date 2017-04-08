@@ -42,7 +42,7 @@ thrustTLE(data,options);
 %% Find residuals
 
 %...Compute residuals between Keplerian elements and propagation
-residualsTLE(data,options);
+[stats,corr] = errorsTLE(data,options);
 
 %% End
 
