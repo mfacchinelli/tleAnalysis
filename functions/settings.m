@@ -11,7 +11,7 @@ function options = settings()
 %...Warn of possible incompatibility with old versions
 vers = version;
 year = str2double(vers(1,end-5:end-2));
-if year < 2018
+if year < 2017
     waitfor(warndlg({'This version of MATLAB is not up-to-date.';'There might be compatibility issues.'},'Version Warning'))
 end
     
