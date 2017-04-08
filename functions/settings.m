@@ -8,7 +8,14 @@
 
 function options = settings()
 
-%...Display message
+%...Warn of possible incompatibility with old versions
+vers = version;
+year = str2double(vers(1,end-5:end-2));
+if year < 2018
+    waitfor(warndlg({'This version of MATLAB is not up-to-date.';'There might be compatibility issues.'},'Version Warning'))
+end
+    
+%...Display welcome message
 disp('Welcome! Please fill in the data in the pop-up window.')
 
 %	Select thrust setting:
