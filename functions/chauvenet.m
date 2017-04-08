@@ -1,10 +1,13 @@
 %  MATLAB Function < chauvenet >
 %
-%  Purpose:     apply Chauvenet's criterion on data set
+%  Purpose:         apply Chauvenet's criterion on data set, to remove
+%                   outliers
 %  Input:
-%   - data:
+%   - data:         data to which the Chauvenet's criterion needs to be
+%                   applied
+%   - reference:    reference for application of Chauvenet's criterion
 % Output:
-%   - data:
+%   - data:         data where outliers have been removed
 
 function data = chauvenet(data,reference)
 
