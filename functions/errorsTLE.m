@@ -57,10 +57,8 @@ for filenum = 1:satnum
     %...Get NORAD ID
     norID = regexprep(file,'[files/.txt]','');
     
-    %...Get data of current satellite
+    %...Extract data
     data = extract(filenum);
-
-    %...Kepler elements
     keplerTLE = data.orbit;
 
     %...Propagate orbit
@@ -90,7 +88,7 @@ for filenum = 1:satnum
     O_offset = median(dOProp); dOProp = dOProp-O_offset;
     keplerProp(:,5) = keplerProp(:,5)-O_offset;
 
-    dTAProp = keplerProp(:,6)-keplerTLE(:,6); % don't remove offset
+    dTAProp = keplerProp(:,6)-keplerTLE(:,6); % do not remove offset
 
     %...Remove changes of 2pi degrees from O and TA
     dOProp(dOProp>pi) = dOProp(dOProp>pi)-2*pi;
@@ -119,21 +117,22 @@ for filenum = 1:satnum
         dOProp = combined(:,20);
     end
     
+    %...Show plots
+    if showfig == true
+        plotAll('residuals',{keplerTLE,keplerProp,mergeArrays(keplerTLE,keplerProp),[daProp,deProp,diProp,dOProp]},options);
+    end
+    
     %...Compute statistical properties of residuals
     a_stat = [std(daProp),mean(daProp)];
     e_stat = [std(deProp),mean(deProp)];
     i_stat = [std(diProp),mean(diProp)];
     O_stat = [std(dOProp),mean(dOProp)];
     
-    %...Access current satellite and save sttistics to array
+    %...Access current satellite and save statistics
     current_sat = satellites(norID);
     stat(filenum,:) = [current_sat(1),current_sat(2),current_sat(3),a_stat,e_stat,i_stat,O_stat];
 
-    %...Show plots
-    if showfig == true
-        plotAll('residuals',{keplerTLE,keplerProp,[daProp,deProp,diProp,dOProp]},options);
-    end
-
+    %...Extract Keplerian elements
     a = keplerTLE(:,2);
     e = keplerTLE(:,3);
     i = keplerTLE(:,4);

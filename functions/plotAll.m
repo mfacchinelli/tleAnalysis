@@ -58,7 +58,8 @@ switch selection
         %...Extract inputs
         keplerTLE = inputs{1};
         keplerProp = inputs{2};
-        residuals = inputs{3};
+        keplerMerged = inputs{3};
+        residuals = inputs{4};
         
         %...File name
         file = options.file;
@@ -70,8 +71,8 @@ switch selection
         for i = 1:6
             subplot(3,2,i)
             hold on
-            plot(keplerTLE(2:end,1),keplerTLE(2:end,i+1))
-            plot(keplerProp(:,1),keplerProp(:,i+1))
+            plot(keplerTLE(:,1),keplerTLE(:,i+1))
+            plot(keplerMerged(2:end,1),keplerMerged(2:end,i+1))
             hold off
             xlabel('Time [day]')
             ylabel(labels{i})
