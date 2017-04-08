@@ -1,10 +1,28 @@
 %  MATLAB Function < errorsTLE >
 %
-%  Purpose:         
+%  Purpose:     analyse the residuals between TLE and propagated orbit
+%               elements in order to find correlations between different
+%               satellite and orbital properties     
 %  Input:
-%   - 
-% Output:
-%   - 
+%   - extract:  structure array containing: 
+%                   1) ID:          satellite identifier
+%                   2) orbit:       time of TLE measurements and corresponding 
+%                                   Keplerian elements (t,a,e,i,O,o,TA,MA)
+%                   3) propagator:  data for propagation for each
+%                                   observation time (n,nd,ndd,Bstar)
+%   - options:  structure array containing:
+%                   1) file:    file name to be read, to extract TLE information
+%                   2) showfig:	command whether to show plots
+%                   3) ignore:  percentage of data which is ignored during
+%                               the analysis
+%                   4) offset:  number of steps to take between observations
+%                   5) outlier: command whether to apply Chauvenet's criterion
+%  Output:
+%   - stat:     array containing satellite properties (mass, shape factor 
+%               presence of solar panels) and Keplerian element statistical 
+%               data (mean and std) for each satellite
+%   - corr:     cell array containing correlations between different
+%               Keplerian elements and errors
 
 function [stat,corr] = errorsTLE(extract,options)
 
@@ -81,22 +99,24 @@ for filenum = 1:satnum
     dTAProp(dTAProp<-pi) = dTAProp(dTAProp<-pi)+2*pi;
 
     %...Apply Chauvenet's criterion if required
-    if (outlier == true)
-        %...Make one combined matrix and remove outliers
-        smoothed = horzcat(keplerTLE,keplerProp,daProp,deProp,diProp,dOProp);
-        smoothed = chauvenet(smoothed,daProp);
-        smoothed = chauvenet(smoothed,deProp);
-        smoothed = chauvenet(smoothed,diProp);
-        smoothed = chauvenet(smoothed,dOProp);
-        smoothed = chauvenet(smoothed,dTAProp);
-
-        keplerTLE = smoothed(:,1:8);
-        keplerProp = smoothed(:,9:16);
-        daProp = smoothed(:,17);
-
-        deProp = smoothed(:,18);
-        diProp = smoothed(:,19);
-        dOProp = smoothed(:,20);
+    if outlier == true
+        %...Combine in one array
+        combined = horzcat(keplerTLE,keplerProp,daProp,deProp,diProp,dOProp);
+        
+        %...Remove outliers
+        combined = chauvenet(combined,daProp);
+        combined = chauvenet(combined,deProp);
+        combined = chauvenet(combined,diProp);
+        combined = chauvenet(combined,dOProp);
+        combined = chauvenet(combined,dTAProp);
+        
+        %...Uncombine arrays
+        keplerTLE = combined(:,1:8);
+        keplerProp = combined(:,9:16);
+        daProp = combined(:,17);
+        deProp = combined(:,18);
+        diProp = combined(:,19);
+        dOProp = combined(:,20);
     end
     
     %...Compute statistical properties of residuals
@@ -114,7 +134,6 @@ for filenum = 1:satnum
         plotAll('residuals',{keplerTLE,keplerProp,[daProp,deProp,diProp,dOProp]},options);
     end
 
-    t = keplerTLE(:,1);
     a = keplerTLE(:,2);
     e = keplerTLE(:,3);
     i = keplerTLE(:,4);
@@ -150,7 +169,8 @@ for filenum = 1:satnum
     Cor_OdO = corrcoef([O,dOProp]);
 
     %...Store correlation data
-    Corr_err(filenum,:) = [Cor_dade(1,2),Cor_dadi(1,2),Cor_dadO(1,2),Cor_dadO(1,2),Cor_dedi(1,2),Cor_dedO(1,2),Cor_didO(1,2)];
+    Corr_err(filenum,:) = [Cor_dade(1,2),Cor_dadi(1,2),Cor_dadO(1,2),Cor_dadO(1,2),...
+                           Cor_dedi(1,2),Cor_dedO(1,2),Cor_didO(1,2)];
 
     Corr_a(filenum,:) = [Cor_ada(1,2),Cor_ade(1,2),Cor_adi(1,2),Cor_adO(1,2)];
     Corr_e(filenum,:) = [Cor_eda(1,2),Cor_ede(1,2),Cor_edi(1,2),Cor_edO(1,2)];

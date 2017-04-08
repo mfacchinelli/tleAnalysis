@@ -11,9 +11,9 @@
 %   - extract:  structure array containing: 
 %                   1) ID:          satellite identifier
 %                   2) orbit:       time of TLE measurements and corresponding 
-%                                   Keplerian elements (t,a,e,i,O,o,TA)
+%                                   Keplerian elements (t,a,e,i,O,o,TA,MA)
 %                   3) propagator:  data for propagation for each
-%                                   observation time (nd,ndd,Bstar)
+%                                   observation time (n,nd,ndd,Bstar)
 
 function [extract,options] = readTLE(options)
 
