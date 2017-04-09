@@ -33,7 +33,7 @@ satnum = size(options,2);
 load('statistics/satData.mat');
 
 %...Initialize arrays for correlation data
-Corr_err = NaN(satnum,7);
+Corr_err = NaN(satnum,6);
 Corr_a = NaN(satnum,4);
 Corr_e = NaN(satnum,4);
 Corr_i = NaN(satnum,4);
