@@ -69,6 +69,7 @@ for filenum = 1:satnum
     lower(lower==0) = 1;
     
     %...Remove first XX percent of TLE data
+    keplerPlot = keplerTLE(lower:k:end-1,:);
     keplerTLE = keplerTLE(lower+k:k:end,:);
     
     %...Find residuals in propagation and correct for constant offset
@@ -95,11 +96,11 @@ for filenum = 1:satnum
     dOProp(dOProp<-pi) = dOProp(dOProp<-pi)+2*pi;
     dTAProp(dTAProp>pi) = dTAProp(dTAProp>pi)-2*pi;
     dTAProp(dTAProp<-pi) = dTAProp(dTAProp<-pi)+2*pi;
-
+    
     %...Apply Chauvenet's criterion if required
     if outlier == true
         %...Combine in one array
-        combined = horzcat(keplerTLE,keplerProp,daProp,deProp,diProp,dOProp);
+        combined = horzcat(keplerTLE,keplerProp,keplerPlot,daProp,deProp,diProp,dOProp);
         
         %...Remove outliers
         combined = chauvenet(combined,daProp);
@@ -111,15 +112,16 @@ for filenum = 1:satnum
         %...Uncombine arrays
         keplerTLE = combined(:,1:8);
         keplerProp = combined(:,9:16);
-        daProp = combined(:,17);
-        deProp = combined(:,18);
-        diProp = combined(:,19);
-        dOProp = combined(:,20);
+        keplerPlot = combined(:,17:24);
+        daProp = combined(:,25);
+        deProp = combined(:,26);
+        diProp = combined(:,27);
+        dOProp = combined(:,28);
     end
     
     %...Show plots
     if showfig == true
-        plotAll('residuals',{keplerTLE,keplerProp,mergeArrays(keplerTLE,keplerProp),[daProp,deProp,diProp,dOProp]},options);
+        plotAll('residuals',{keplerTLE,keplerProp,mergeArrays(keplerPlot,keplerProp),[daProp,deProp,diProp,dOProp]},option);
     end
     
     %...Compute statistical properties of residuals
