@@ -17,7 +17,7 @@ J2 = 1082.63e-6;    % [-]       J2 effect
 J4 = -1.65597e-6;   % [-]       J4 effect
 
 %...Time constants
-Ts = 86164.100352;  % [s]       Earth sidereal day (second)
+Ts = 86400;         % [s]       Earth sidereal day (second) [164.100352]
 Tm = Ts/60;         % [min]     Earth sidereal day (minute)
 Th = Tm/60;         % [hr]      Earth sidereal day (hour)
 

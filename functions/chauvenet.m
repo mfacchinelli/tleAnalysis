@@ -1,7 +1,8 @@
 %  MATLAB Function < chauvenet >
 %
 %  Purpose:         apply Chauvenet's criterion on data set, to remove
-%                   outliers
+%                   outliers; originally created by Paul Schattenberg and 
+%                   adapted by the tleAnalysis team
 %  Input:
 %   - data:         data to which the Chauvenet's criterion needs to be
 %                   applied
