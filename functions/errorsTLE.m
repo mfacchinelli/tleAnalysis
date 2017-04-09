@@ -170,7 +170,7 @@ for filenum = 1:satnum
     Cor_OdO = corrcoef([O,dOProp]);
 
     %...Store correlation data
-    Corr_err(filenum,:) = [Cor_dade(1,2),Cor_dadi(1,2),Cor_dadO(1,2),Cor_dadO(1,2),...
+    Corr_err(filenum,:) = [Cor_dade(1,2),Cor_dadi(1,2),Cor_dadO(1,2),...
                            Cor_dedi(1,2),Cor_dedO(1,2),Cor_didO(1,2)];
 
     Corr_a(filenum,:) = [Cor_ada(1,2),Cor_ade(1,2),Cor_adi(1,2),Cor_adO(1,2)];
