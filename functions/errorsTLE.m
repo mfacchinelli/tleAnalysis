@@ -40,7 +40,7 @@ Corr_i = NaN(satnum,4);
 Corr_O = NaN(satnum,4);
 
 %...Initialize satellite statistics array
-stat = NaN(satnum,11);
+stat = NaN(satnum,12);
 
 %...Loop over files
 for filenum = 1:satnum
@@ -130,9 +130,12 @@ for filenum = 1:satnum
     i_stat = [std(diProp),mean(diProp)];
     O_stat = [std(dOProp),mean(dOProp)];
     
+    %...Get amount of measurements
+    measurements = length(daProp);
+    
     %...Access current satellite and save statistics
     current_sat = satellites(norID);
-    stat(filenum,:) = [current_sat(1),current_sat(2),current_sat(3),a_stat,e_stat,i_stat,O_stat];
+    stat(filenum,:) = [current_sat(1),current_sat(2),current_sat(3),measurements,a_stat,e_stat,i_stat,O_stat];
 
     %...Extract Keplerian elements
     a = keplerTLE(:,2);
