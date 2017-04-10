@@ -76,6 +76,6 @@ if present == false
             'query',link};
 
     %...Write to file
-    urlwrite(url,['files/',filename,'.txt'],'Post',post,'Timeout',10);
+    urlwrite(url,['files/',filename,'.txt'],'Post',post,'Timeout',30);
     pause(5) % avoid time out
 end
