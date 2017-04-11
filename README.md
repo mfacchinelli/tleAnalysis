@@ -12,8 +12,9 @@ Included functions for TLE analysis:
 - `downloadTLE.m`:   MATLAB function to download TLEs from space-track.org 
 - `errorsTLE.m`:   MATLAB function to analyze error sources in propagation and find correlations between errors and spacecraft parameters
 - `peaksTLE.m`:  MATLAB function to find peaks in TLE observations
-- `propagateTLE.m`:  MATLAB function to propagate Keplerian elements using SPG4
+- `propagateTLE.m`:  MATLAB function to propagate Keplerian elements using SGP4
 - `readTLE.m`:       MATLAB function for reading TLE files and plotting Keplerian elements over time
+- `SGP4.m`:       MATLAB representation of SGP4 propagator 
 - `statTLE.m`:       MATLAB function to collect statistical information on TLEs
 - `thrustTLE.m`:     MATLAB function to detect thrust
  
