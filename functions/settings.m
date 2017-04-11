@@ -12,7 +12,7 @@ function options = settings()
 vers = version;
 year = str2double(vers(1,end-5:end-2));
 if year < 2017
-    if vers(end-5:end-1) ~= '2016b'
+    if ~strcmp(vers(end-5:end-1),'2016b')
         waitfor(warndlg({'This version of MATLAB is not up-to-date.';'There might be compatibility issues.'},'Version Warning'))
     end
 end
@@ -25,8 +25,7 @@ disp('Welcome! Please fill in the data in the pop-up window.')
 %    	true  (1):  no available information/do not know
 
 %...Select mode
-% mode = questdlg('Choose how to input settings.','Mode Selection','Select','Manual','Default','Default');
-mode = 'Manual';
+mode = questdlg('Choose how to input settings.','Mode Selection','Select','Manual','Default','Default');
 
 %...Use mode
 defaultAnswer = {'32784,32787,32789','1','1','5','1.05','50','1','1'};
@@ -61,7 +60,7 @@ switch mode
                            'Safety factor for detection (-):',...
                            'Separation between thrust periods (day):',...
                            'Number of steps for propagation (-):',...
-                           "Apply Chauvenet's criterion (1/0):"},...
+                           'Apply Chauvenet criterion (1/0):'},...
                           'TLE Analysis',...
                           1,...
                           defaultAnswer(2:end),'on');
