@@ -19,7 +19,7 @@ ignore = options.ignore;
 
 %...Ignore intial part of TLE (avoid injection maneuver, etc.)
 lower = ceil(ignore*size(kepler,1));
-lower(lower==0) = 1;
+lower(lower==0) = 1; % make sure there is no error
 
 %...Change in orbital elements
 da = diff(kepler(lower:end,2));

@@ -52,7 +52,8 @@ for filenum = 1:satnum
     showfig = option.showfig;
     outlier = option.outlier;
     ignore = option.ignore;
-    k = option.offset;
+    offset = option.offset;
+    offset(offset==0) = 1; % make sure there is no error
     
     %...Get NORAD ID
     norID = regexprep(file,'[files/.txt]','');
@@ -69,8 +70,8 @@ for filenum = 1:satnum
     lower(lower==0) = 1;
     
     %...Remove first XX percent of TLE data
-    keplerPlot = keplerTLE(lower:k:end-1,:);
-    keplerTLE = keplerTLE(lower+k:k:end,:);
+    keplerPlot = keplerTLE(lower:offset:end-1,:);
+    keplerTLE = keplerTLE(lower+offset:offset:end,:);
     
     %...Find residuals in propagation and correct for constant offset
     daProp = keplerProp(:,2)-keplerTLE(:,2);

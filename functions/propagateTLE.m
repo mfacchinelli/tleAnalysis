@@ -21,22 +21,23 @@ global Re Tm
 
 %...Extract options
 ignore = options.ignore;
-k = options.offset;
+offset = options.offset;
+offset(offset==0) = 1; % make sure there is no error
 
 %...Ignore intial part of TLE (avoid injection maneuver)
 lower = ceil(ignore*size(extract.orbit,1));
-lower(lower==0) = 1;
+lower(lower==0) = 1; % make sure there is no error
 
 %...Extract data and convert to fuc*ed up units
-t = extract.orbit(lower:k:end,1)*Tm;      	% [min]     time
-a = extract.orbit(lower:k:end,2)/Re;        % [Re]      semi-major axis
-MA = extract.orbit(lower:k:end,8);          % [rad]     mean anomaly
-O = extract.orbit(lower:k:end,5);           % [rad]     right ascension of ascending node
-o = extract.orbit(lower:k:end,6);           % [rad]     argument of perigee
-e = extract.orbit(lower:k:end,3);           % [-]       eccentricity
-i = extract.orbit(lower:k:end,4);           % [rad]     inclination
-n = extract.propagator(lower:k:end,1);      % [rad/min] mean motion
-Bstar = extract.propagator(lower:k:end,4);  % [1/Re]    drag term
+t = extract.orbit(lower:offset:end,1)*Tm;      	% [min]     time
+a = extract.orbit(lower:offset:end,2)/Re;        % [Re]      semi-major axis
+MA = extract.orbit(lower:offset:end,8);          % [rad]     mean anomaly
+O = extract.orbit(lower:offset:end,5);           % [rad]     right ascension of ascending node
+o = extract.orbit(lower:offset:end,6);           % [rad]     argument of perigee
+e = extract.orbit(lower:offset:end,3);           % [-]       eccentricity
+i = extract.orbit(lower:offset:end,4);           % [rad]     inclination
+n = extract.propagator(lower:offset:end,1);      % [rad/min] mean motion
+Bstar = extract.propagator(lower:offset:end,4);  % [1/Re]    drag term
 
 %...Propagate
 for j = 1:size(t,1)-1
