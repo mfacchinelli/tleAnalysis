@@ -25,7 +25,8 @@ disp('Welcome! Please fill in the data in the pop-up window.')
 %    	true  (1):  no available information/do not know
 
 %...Select mode
-mode = questdlg('Choose how to input settings.','Mode Selection','Select','Manual','Default','Default');
+% mode = questdlg('Choose how to input settings.','Mode Selection','Select','Manual','Default','Default');
+mode = 'Manual';
 
 %...Use mode
 defaultAnswer = {'32784,32787,32789','1','1','5','1.05','50','1','1'};
