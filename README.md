@@ -1,6 +1,6 @@
 # tleAnalysis
 
-See the Wiki (click [here](https://github.com/mfacchinelli/tleAnalysis/wiki)) to have more information on this project. A video tutorial is available on YouTube, by clicking [here](https://youtu.be/2I0SXzgqR7w).
+See the [Wiki](https://github.com/mfacchinelli/tleAnalysis/wiki) to have more information on this project. A video tutorial is available on [YouTube](https://youtu.be/2I0SXzgqR7w).
 
 ***
 
