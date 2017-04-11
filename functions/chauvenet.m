@@ -46,3 +46,12 @@ end
 
 %...Remove outliers
 data(outlier,:) = [];
+
+%...Message user if too many data points were removed
+initial = size(outlier,1); % initial number of elements
+removed = size(find(outlier==true),1); % number of points removed
+if removed/initial >= 0.05
+    waitfor(warndlg({'More than 5% of data has been removed.';...
+                     'There might be errors in the TLE observations.'},...
+                    'Outlier Warning'))
+end
